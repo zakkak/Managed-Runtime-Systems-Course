@@ -1,0 +1,49 @@
+% File for the Beamer Outer Color Theme bear 2013
+% Copyright 2013 by Raul Gomez
+% This file may be distributed and/or modified
+% 	1. under the LaTeX Project Public License and/or
+% 	2. under the GNU Public License.
+
+\mode<presentation>
+
+%%%%%%%%%%%%%%%%%%
+% Color palettes %
+%%%%%%%%%%%%%%%%%%
+
+\setbeamercolor*{palette primary}{use=structure,fg=white,bg=structure.fg}
+\setbeamercolor*{palette secondary}{use=structure,fg=white,bg=structure.fg!75!black}
+\setbeamercolor*{palette tertiary}{use=structure,fg=white,bg=structure.fg!50!black}
+\setbeamercolor*{palette quaternary}{fg=white,bg=black}
+
+\setbeamercolor*{sidebar}{use=structure,bg=structure.fg}
+
+\setbeamercolor*{palette sidebar primary}{use=structure,fg=structure.fg!10}
+\setbeamercolor*{palette sidebar secondary}{fg=white}
+\setbeamercolor*{palette sidebar tertiary}{use=structure,fg=structure.fg!50}
+\setbeamercolor*{palette sidebar quaternary}{fg=white}
+
+
+
+%%%%%%%%%%%%%%%%
+% Title colors %
+%%%%%%%%%%%%%%%%
+
+\setbeamercolor*{titlelike}{parent=structure}
+\setbeamercolor*{frametitle}{use={structure,normal text},fg=structure.fg, bg=normal text.bg}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Head and foot colors %
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\definecolor{PMS Cool Grey 11}{HTML}{4D4E53}			% Color PMS cool grey 11
+\definecolor{footline grey}{HTML}{494949}                       % Same as C grey
+
+\setbeamercolor*{headline}{parent=palette primary}
+\setbeamercolor*{slidenumber}{use={headline},fg=headline.bg,bg=headline.fg}
+\setbeamercolor*{footline}{fg=white,bg=footline grey}
+
+\mode
+<all>

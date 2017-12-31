@@ -1,0 +1,189 @@
+% File for the Beamer Inner Theme flat 2013
+% Copyright 2013 by Raul Gomez
+% This file may be distributed and/or modified
+% 	1. under the LaTeX Project Public License and/or
+% 	2. under the GNU Public License.
+%
+% Based on: beamerinnerthemeFlip by Flip Tanedo
+
+\mode<presentation>
+
+%%%%%%%%%%%%
+% Options  %
+%%%%%%%%%%%%
+
+\DeclareOptionBeamer{bullet}{\def\beamer@flat@bullet{#1}}
+\ExecuteOptionsBeamer{bullet=circle}
+
+\ProcessOptionsBeamer
+
+
+
+%%%%%%%%%%%%%%
+% Title page %
+%%%%%%%%%%%%%%
+
+\defbeamertemplate*{title page}{flat}[1][]
+{\addtocounter{framenumber}{-1}
+\begin{center}
+\Huge\textcolor{structure}{\inserttitle}
+
+\vfill
+
+\Large\textcolor{normal text.fg!50!white}{\textit{\insertinstitute}, \insertdate}
+\vspace{1em}
+
+\vfill
+
+
+\Large \raisebox{.25cm}{ \insertauthor} \qquad \insertlogo
+\end{center}
+}
+
+
+
+%%%%%%%%%%%
+% Margins %
+%%%%%%%%%%%
+
+\newlength{\beamer@Ithaca@normalmargin}
+\setlength{\beamer@Ithaca@normalmargin}{.06\paperwidth}
+\setbeamersize{text margin left=\beamer@Ithaca@normalmargin}
+\setbeamersize{text margin right=\beamer@Ithaca@normalmargin}
+\setlength\leftmargini{.6\beamer@Ithaca@normalmargin}
+\setlength\leftmarginii{.6\beamer@Ithaca@normalmargin}
+\setlength\leftmarginiii{.6\beamer@Ithaca@normalmargin}
+
+
+
+%%%%%%%%%
+% Items %
+%%%%%%%%%
+
+%bullet=circle
+\defbeamertemplate{itemize item}{squarealt}{\tiny\raise.5ex\hbox{\donotcoloroutermaths$\blacksquare$}}
+\defbeamertemplate{itemize subitem}{squarealt}{\tiny\raise.4ex\hbox{\donotcoloroutermaths$\square$}}
+\defbeamertemplate{itemize subsubitem}{squarealt}{\tiny\raise.3ex\hbox{\donotcoloroutermaths$\blacksquare$}}
+
+%bullet=square
+\defbeamertemplate{itemize item}{circlealt}{\small\raise.2ex\hbox{\donotcoloroutermaths$\bullet$}}
+\defbeamertemplate{itemize subitem}{circlealt}{\small\raise.1ex\hbox{\donotcoloroutermaths$\circ$}}
+\defbeamertemplate{itemize subsubitem}{circlealt}{\scriptsize\raise.1ex\hbox{\donotcoloroutermaths$\bullet$}}
+\setbeamertemplate{items}[circlealt]
+
+%bullet=none
+\defbeamertemplate{itemize item}{nonealt}{}
+\defbeamertemplate{itemize subitem}{nonealt}{}
+\defbeamertemplate{itemize subsubitem}{nonealt}{}
+\setbeamertemplate{items}[nonealt]
+
+%choose apropriate bullet
+\def\circletext{circle}
+\def\nonetext{none}
+\ifx\beamer@flat@bullet\circletext
+  \setbeamertemplate{items}[circlealt]
+\else
+\ifx\beamer@flat@bullet\nonetext
+  \setbeamertemplate{items}[nonealt]
+\else
+  \setbeamertemplate{items}[squarealt]
+\fi
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Table of Contents %
+%%%%%%%%%%%%%%%%%%%%%
+
+\defbeamertemplate*{section in toc}{flat}{\inserttocsectionnumber~\inserttocsection\par}
+
+\defbeamertemplate*{subsection in toc}{flat}{%
+\leavevmode\leftskip=1.5em\inserttocsectionnumber.\inserttocsubsectionnumber~\inserttocsubsection\par%
+}
+
+\defbeamertemplate*{subsubsection in toc}{flat}{%
+\leavevmode\normalsize\usebeamerfont{subsection in toc}\leftskip=3em%
+  \usebeamerfont{subsubsection in toc}\inserttocsectionnumber.\inserttocsubsectionnumber.%
+\inserttocsubsubsectionnumber~\inserttocsubsubsection\par%
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Theorems and such %
+%%%%%%%%%%%%%%%%%%%%%
+
+%plain theorem environment
+\makeatletter
+\def\th@plain{%
+    \normalfont % body font
+    \def\inserttheoremblockenv{alertblock}
+  }
+\makeatother
+
+%theorem environments using the plain style.
+\theoremstyle{plain}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{claim}[theorem]{Claim}
+\newtheorem{algorithm}[theorem]{Algorithm}
+\newtheorem{axiom}[theorem]{Axiom}
+\newtheorem{criterion}[theorem]{Criterion}
+
+%definition theorem environment
+\makeatletter
+\def\th@definition{%
+    \normalfont % body font
+    \def\inserttheoremblockenv{block}
+  }
+\makeatother
+
+%difinition-type theorem environments.
+\theoremstyle{definition}
+\newtheorem{condition}[theorem]{Condition}
+\newtheorem{exercise}[theorem]{Exercise}
+\newtheorem{notation}[theorem]{Notation}
+\newtheorem{case}[theorem]{Case}
+\newtheorem{question}[theorem]{Question}
+
+%remark theorem environment
+\makeatletter
+\def\th@remark{%
+    \normalfont % body font
+    \def\inserttheoremblockenv{exampleblock}
+  }
+\makeatother
+
+%remark-type theorem environments
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{remarks}[theorem]{Remarks}
+\newtheorem{summary}[theorem]{Summary}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{conclusion}[theorem]{Conclusion}
+\newtheorem{acknowledgement}[theorem]{Acknowledgement}
+
+
+
+%%%%%%%%%%%
+% Buttons %
+%%%%%%%%%%%
+
+\newlength{\tempa}%
+\newlength{\buttonmargin}%
+
+\defbeamertemplate*{button}{flat}{%
+%
+\settowidth{\tempa}{\insertbuttontext}%
+\setlength{\buttonmargin}{1.125ex}
+%
+\addtolength{\tempa}{2\buttonmargin}
+%
+\begin{beamercolorbox}[wd=\tempa,ht=2.5ex,dp=\buttonmargin,center]{button}%
+\insertbuttontext%
+\end{beamercolorbox}%
+}
+
+
+
+\mode<all>

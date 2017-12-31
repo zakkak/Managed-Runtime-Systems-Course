@@ -1,0 +1,68 @@
+% Main style file for the BEAMER ITHACA THEME 2013
+% Copyright 2013 by Raul Gomez
+% This file may be distributed and/or modified
+% 	1. under the LaTeX Project Public License and/or
+% 	2. under the GNU Public License.
+%
+% Comments: This is still a work in progress.
+% Based on: beamerthemeIthaca by Flip Tanedo
+
+
+
+\mode<presentation>
+
+%%%%%%%%%%%%%%%%%%
+% Global Options %
+%%%%%%%%%%%%%%%%%%
+
+\DeclareOptionBeamer{bullet}{\PassOptionsToPackage{bullet=#1}{beamerinnerthemeflat}}
+\DeclareOptionBeamer{nobigpagenumber}{\PassOptionsToPackage{nobigpagenumber}{beamerouterthemesolidinfolines}}
+\DeclareOptionBeamer{noheadline}{\PassOptionsToPackage{noheadline}{beamerouterthemesolidinfolines}}
+\DeclareOptionBeamer{nofootline}{\PassOptionsToPackage{nofootline}{beamerouterthemesolidinfolines}}
+\DeclareOptionBeamer{watermark}{\PassOptionsToPackage{watermark=#1}{beamerouterthemesolidinfolines}}
+\DeclareOptionBeamer{grey}{\PassOptionsToPackage{grey}{beamercolorthemeBigRed}}
+
+\ProcessOptionsBeamer
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Calls to auxiliary theme files %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\useinnertheme{flat}	% Calls beamerinnerthemeflat.sty
+\useoutertheme{solidinfolines}	% Calls beamerouterthemesolidinfolines.sty
+\usecolortheme{BigRed}		% Calls beamercolorthemebear.sty
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Navigation  symbols %
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\setbeamertemplate{navigation symbols}{} 	% Turns off PDF navigation symbols
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Getting the appendix to work properly %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\appendix}{%
+\setcounter{section}{0}%
+\renewcommand{\thesection}{\Alph{section}}}%
+
+
+
+%%%%%%%%%%%%%%%%%%%%
+% A useful command %
+%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\bigpause}{\pause\bigskip}
+
+
+
+\mode<all>
+\endinput

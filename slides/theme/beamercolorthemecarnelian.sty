@@ -1,0 +1,222 @@
+% File for the Beamer Inner Color Theme carnelian 2013
+% Copyright 2013 by Raul Gomez
+% This file may be distributed and/or modified
+% 	1. under the LaTeX Project Public License and/or
+% 	2. under the GNU Public License.
+
+
+
+\mode<presentation>
+
+
+%%%%%%%%%%%
+% Options %
+%%%%%%%%%%%
+
+\newif\ifbeamer@carnelian@grey
+\beamer@carnelian@greyfalse
+\DeclareOptionBeamer{grey}{\beamer@carnelian@greytrue}
+
+\ProcessOptionsBeamer
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cornell brand book primary colors %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{carnelian}{HTML}{B31B1B}			% Carnelian
+\definecolor{187}{HTML}{B31B1B}				% Carnelian
+\definecolor{Cool Grey 11}{HTML}{4D4E53}		% Very dark grayish blue
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cornell brand book secundary colors %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{403}{HTML}{A2998B}		     		% Dark grayish orange
+\definecolor{warm grey 3}{HTML}{D8D2C9}			% Greyish orange
+\definecolor{5635}{HTML}{9FAD9F}			% Dark grayish lime green
+\definecolor{5845}{HTML}{BFB778}			% Slightly desaturated yellow
+\definecolor{7458}{HTML}{89CCE2}			% Very soft cyan
+\definecolor{7493}{HTML}{C9D6A5}			% Greyish green
+\definecolor{7462}{HTML}{0068AC}			% Dark blue
+\definecolor{7463}{HTML}{00355F}			% Very dark blue
+\definecolor{032}{HTML}{EF4035}				% Bright red
+\definecolor{144}{HTML}{F8981D}				% Vivid orange
+\definecolor{369}{HTML}{6EB43F}				% Moderate green
+\definecolor{process blue}{HTML}{0093D0}		% Strong blue
+
+
+
+%%%%%%%%%%%%%%%%%%%%%
+% Background colors %
+%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{strong greyish yellow}{HTML}{DDD9C2}	% Warm background
+\definecolor{light greyish yellow}{HTML}{E9E6D4}	% Light warm background
+
+\definecolor{strong grey}{HTML}{D8D8D8}                 % Cool background
+\definecolor{light grey}{HTML}{E5E5E5}			% Light cool background
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Main colors in the color wheel %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{red}{HTML}{FF0000}
+\definecolor{orange}{HTML}{FF7F00}
+\definecolor{yellow}{HTML}{FFFF00}
+\definecolor{chartreuse}{HTML}{7FFF00}
+\definecolor{green}{HTML}{00FF00}
+\definecolor{spring green}{HTML}{00FF7F}
+\definecolor{cyan}{HTML}{00FFFF}
+\definecolor{azure}{HTML}{007FFF}
+\definecolor{blue}{HTML}{0000FF}
+\definecolor{violet}{HTML}{7F00FF}
+\definecolor{magenta}{HTML}{FF00FF}
+\definecolor{rose}{HTML}{FF007F}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Y version of the color wheel %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Each Y color is uniquely characterized by               %
+% a) Has the same hue as the original color               %
+% b) Has the same luminance (Y) as carnelian              %
+% c) Is as colorful as posible subject to this conditions %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{Y red}{HTML}{F20000}
+\definecolor{Y orange}{HTML}{7A3D00}
+\definecolor{Y yellow}{HTML}{525200}
+\definecolor{Y chartreuse}{HTML}{316200}
+\definecolor{Y green}{HTML}{007B00}
+\definecolor{Y spring green}{HTML}{007138}
+\definecolor{Y cyan}{HTML}{006868}
+\definecolor{Y azure}{HTML}{005AB4}
+\definecolor{Y blue}{HTML}{3232FF}
+\definecolor{Y violet}{HTML}{8309FF}
+\definecolor{Y magenta}{HTML}{B100B1}
+\definecolor{Y rose}{HTML}{CD0066}
+\definecolor{Y grey}{HTML}{494949}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% C version of the color wheel %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Each C color is uniquely characterized by                 %
+% a) Has the same hue as the original color                 %
+% b) Has the same luminance (Y) as carnelian                %
+% c) Its colorfulness relative to the corresponding Y color %
+%    equals the colorfulness of carnelian relative to Y red %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\definecolor{C red}{HTML}{B31B1B}
+\definecolor{C orange}{HTML}{67411B}
+\definecolor{C yellow}{HTML}{4F4F1B}
+\definecolor{C chartreuse}{HTML}{3A591B}
+\definecolor{C green}{HTML}{1B681B}
+\definecolor{C spring green}{HTML}{1B623E}
+\definecolor{C cyan}{HTML}{1B5C5C}
+\definecolor{C azure}{HTML}{1B548C}
+\definecolor{C blue}{HTML}{3B3BBB}
+\definecolor{C violet}{HTML}{6D21BB}
+\definecolor{C magenta}{HTML}{8A1B8A}
+\definecolor{C rose}{HTML}{9C1B5B}
+\definecolor{C grey}{HTML}{494949}
+
+
+
+
+%%%%%%%%%%%%%%%
+% Text Colors %
+%%%%%%%%%%%%%%%
+
+%Option for grey or warm background
+\ifbeamer@carnelian@grey%
+\setbeamercolor*{normal text}{fg=black,bg=strong grey}
+\setbeamercolor*{block text}{bg=light grey}%
+\else%
+\setbeamercolor*{normal text}{fg=black,bg=strong greyish yellow}%
+\setbeamercolor*{block text}{bg=light greyish yellow}%
+\fi
+
+\setbeamercolor*{structure}{fg=carnelian}
+\setbeamercolor*{alerted text}{parent=structure}
+\setbeamercolor*{comment text}{fg=C grey}
+\setbeamercolor*{example text}{fg=C chartreuse}
+
+
+\setbeamercolor{Alerted text}{fg=Y red}
+\setbeamercolor{ALERTED text}{fg=red}
+
+\setbeamercolor{Comment text}{use=normal text, fg=normal text.fg!50!white}
+\setbeamercolor{COMMENT text}{use=normal text, fg=normal text.fg!30!white}
+
+\setbeamercolor{Example text}{fg=Y chartreuse}
+\setbeamercolor{EXAMPLE text}{fg=chartreuse}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Some useful commands %
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \newcommand{\comment}[1]{{\usebeamercolor[fg]{comment text}{\footnotesize{#1}\normalsize}}} % comment mild
+% \newcommand{\Comment}[1]{{\usebeamercolor[fg]{Comment text}{\footnotesize{#1}\normalsize}}} % comment bold
+% \newcommand{\COMMENT}[1]{{\usebeamercolor[fg]{COMMENT text}{\footnotesize{#1}\normalsize}}} % comment crazy bold
+\newcommand{\Alert}[1]{{\usebeamercolor[fg]{Alerted text}{#1}}} % louder alert
+\newcommand{\ALERT}[1]{{\usebeamercolor[fg]{ALERTED text}{#1}}} % loudest alert
+\newcommand{\eg}[1]{{\usebeamercolor[fg]{example text}{#1}}} % example color
+\newcommand{\Eg}[1]{{\usebeamercolor[fg]{Example text}{#1}}} % example bold
+\newcommand{\EG}[1]{{\usebeamercolor[fg]{EXAMPLE text}{#1}}}   % example crazy bright
+%% "\alert" is already a beamer pre-defined
+
+
+
+%%%%%%%%%%%%%%%%
+% Block colors %
+%%%%%%%%%%%%%%%%
+
+%Equivalent to \theoremstyle{plain}. Use for: theorem, proposition, lemma, corollary, conjecture, algorithm, axiom, criterion, etc.
+\setbeamercolor*{block title alerted}{use=alerted text,fg=white,bg=alerted text.fg}
+\setbeamercolor*{block body alerted}{parent=block text}
+
+%Equivalent to \theoremstyle{definition}. Use for: definition, condition, exercise, notation, question, problem, solution, etc.
+\setbeamercolor*{block title}{use=comment text,fg=white,bg=comment text.fg}
+\setbeamercolor*{block body}{parent=block text}
+
+%Equivalent to \theoremstyle{remark}. Use for: remark, example, summary, observation, conclusion, acknowledgment, claim, case, etc.
+\setbeamercolor*{block title example}{use=example text, fg=white, bg=example text.fg}
+\setbeamercolor*{block body example}{parent=block text}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Bibliography colors %
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\setbeamercolor{bibliography item}{parent=comment text}
+
+\setbeamercolor*{bibliography entry author}{parent=comment text}
+\setbeamercolor*{bibliography entry title}{parent=comment text}
+\setbeamercolor*{bibliography entry location}{parent=comment text}
+\setbeamercolor*{bibliography entry note}{parent=comment text}
+
+%%%%%%%%%%%%%%%%%
+% Button colors %
+%%%%%%%%%%%%%%%%%
+
+
+\setbeamercolor{button}{use=structure,fg=white,bg=structure.fg}
+
+\mode
+<all>

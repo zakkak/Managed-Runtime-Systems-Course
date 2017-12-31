@@ -1,0 +1,15 @@
+#@default_files = ("pres");
+#$force_mode = 1;
+$pdf_mode = 1;
+$pdflatex = 'xelatex -halt-on-error -shell-escape -synctex=1 %O %S';
+$preview_continuous_mode = 1;
+$use_make_for_missing_files = 1;
+push @generated_exts, "snm";
+push @generated_exts, "nav";
+push @generated_exts, "log";
+push @generated_exts, "tdo";
+push @generated_exts, "run.xml";
+push @generated_exts, "blx.bib";
+push @generated_exts, "synctex.gz";
+$bibtex_use = 2;
+$ENV{'TEXINPUTS'}='./theme/:' . $ENV{'TEXINPUTS'};
