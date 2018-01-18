@@ -203,7 +203,7 @@ SmallCapsFeatures={Letters=SmallCaps},
 
 \begin{frame}{What is a Managed Runtime System?}
   \centering
-  An abstraction layer between a managed programming language and the system that executes it
+  A \alert{machine} that executes managed programs
   \vfill
 
   \tikzstyle{layer} = [text=black, fill=white, rectangle, minimum width=11cm, minimum height=1cm, draw=myyellow]
@@ -212,26 +212,38 @@ SmallCapsFeatures={Letters=SmallCaps},
     \node (program) [layer] {Program (Java, Python, etc.)};
     \node (vm) [layer, below=of program, fill=myyellow] {Managed Runtime System / Virtual Machine};
 
-    \node (oscover) [visible on=<1>, layer, below=of vm, fill=myyellow] {};
+    \node (oscover) [layer, below=of vm, fill=myyellow] {};
+    \node (hwcover) [layer, below=of oscover, fill=myyellow] {};
 
-    \node (linux) [visible on=<2>, layer, below=of vm.south west, anchor=north west, minimum width=3.25cm] {GNU/Linux};
-    \node (osx) [visible on=<2>, layer, right=of linux, minimum width=3.25cm] {OSX};
-    \node (win) [visible on=<2>, layer, right=of osx, minimum width=3.25cm] {Windows};
-    \node (other) [visible on=<2>, layer, right=of win, minimum width=1.2cm] {\dots};
-    \node (x86) [layer, below=of linux.south west, anchor=north west, minimum width=4cm] {x86};
-    \node (armv8) [layer, right=of x86, minimum width=4cm] {ARMv8};
-    \node (other2) [layer, right=of armv8, minimum width=2.97cm] {\dots};
+    \node (linux) [visible on=<3->, layer, below=of vm.south west, anchor=north west, minimum width=3.25cm] {GNU/Linux};
+    \node (osx) [visible on=<3->, layer, right=of linux, minimum width=3.25cm] {OSX};
+    \node (win) [visible on=<3->, layer, right=of osx, minimum width=3.25cm] {Windows};
+    \node (other) [visible on=<3->, layer, right=of win, minimum width=1.2cm] {\dots};
+
+    \node (x86) [visible on=<2->, layer, below=of linux.south west, anchor=north west, minimum width=4cm] {x86};
+    \node (armv8) [visible on=<2->, layer, right=of x86, minimum width=4cm] {ARMv8};
+    \node (other2) [visible on=<2->, layer, right=of armv8, minimum width=2.97cm] {\dots};
 
     \scoped[on background layer]{
       \node [fit=(program)(x86), inner sep=0, blur shadow] {};
     }
 
-    \node [visible on=<2>, fit=(linux)(other), inner sep=0, draw=SkyBlue, thick] {};
-    \node [visible on=<2>, text=SkyBlue, left=of linux] {OS};
-    \node [fit=(x86)(other2), inner sep=0, draw=Orange, thick] {};
-    \node [text=Orange, left=of x86] {HW};
+    \node [visible on=<3->, fit=(linux)(other), inner sep=0, draw=SkyBlue, thick] {};
+    \node [visible on=<3->, text=SkyBlue, left=of linux] {OS};
+    \node [visible on=<2->, fit=(x86)(other2), inner sep=0, draw=Orange, thick] {};
+    \node [visible on=<2->, text=Orange, left=of x86] {HW};
+    \node [right=of program, text opacity=0] {HW};
 
   \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Other names for Managed Runtime Systems}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Managed Runtimes
+  \item Virtual Machines
+  \item Process Virtual Machines
+  \item Language Virtual Machines
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -255,6 +267,7 @@ SmallCapsFeatures={Letters=SmallCaps},
   \item Sandboxed environment
   \item No pointer arithmetic
   \item No arbitrary memory accesses
+  \item No arbitrary code flow
   \end{itemize}
 \end{frame}
 
@@ -292,11 +305,95 @@ SmallCapsFeatures={Letters=SmallCaps},
 \begin{frame}{How Does it Work?}
   \def\arraystretch{2}
   \centering
-  \begin{tabular}{l l}
+  \begin{tabular}{r l}
    \alert{Interpreters}       & Parse and execute instructions \\
    \alert{JIT compilers}      & On the fly compilation to machine code \\
    \alert{Garbage Collectors} & Automatic memory management \\
    \alert{Memory Models}      & Define expected behavior
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{The most popular MRS/VMs}
+  \centering
+  \begin{tabular}{r l}
+   \alert{Java}                  & HotSpot (Oracle and OpenJDK)        \\
+                                 & OpenJ9 (IBM and Eclipse)            \\
+                                 & Android Runtime (Google)            \\
+                                                                       \\
+   \alert{JS}                    & V8 (Google)                         \\
+                                 & SpiderMonkey (Mozilla)              \\
+                                 & JavaScriptCore a.k.a. Nitro (Apple) \\
+                                 & Chakra (Microsoft)                  \\
+                                                                       \\
+   \alert{.Net (C\#, J\#, etc.)} & Common Language Runtime (Microsoft) \\
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Different Goals Different Challenges}
+  \centering
+  \begin{tabular}{r l}
+   \alert{Java \& .Net} & Server Applications                  \\
+                        & Desktop Applications                 \\
+                        & Mobile Applications                  \\
+                                                               \\
+   \alert{JS}           & Web Backend (e.g. nodeJS)            \\
+                        & Web Frontend                         \\
+                        & Desktop Applications (e.g. Electron) \\
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Server Applications}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item High throughput
+  \item Low latency
+  \item Large heap
+  \item Responsiveness
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Desktop Applications}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Responsiveness
+  \item Fast startup (bootstrap)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Mobile Applications}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Responsiveness
+  \item Fast startup (bootstrap)
+  \item Small memory footprint
+  \item Low energy consumption
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Web Backend}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item High throughput
+  \item Large heap
+  \item Responsiveness
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Web Frontend}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Responsiveness
+  \item Fast startup (bootstrap)
+  \item Small memory footprint
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Different Goals Different Challenges}
+  \centering
+  \begin{tabular}{r | l l l l}
+                 & Performance & Memory & Energy      & Startup \\
+                 & Orientation & Usage  & Consumption & Time    \\
+    \hline
+    Desktop Apps & Latency     & Medium & Low         & Fast    \\
+    Mobile Apps  & Latency     & Low    & Low         & Fast    \\
+    Web Frontend & Latency     & Low    & Low         & Fast    \\
+    Web Backend  & Throughput  & High   & \$          & --      \\
+    Server Apps  & Both        & High   & \$          & --      \\
   \end{tabular}
 \end{frame}
 
