@@ -80,7 +80,8 @@ SmallCapsFeatures={Letters=SmallCaps},
 \usepackage{xcolor}
 \usepackage{array}
 \usepackage{tikz}
-\usetikzlibrary{decorations,arrows,shapes,fit,backgrounds,trees}
+\usetikzlibrary{arrows,arrows.meta,shapes,decorations,decorations.pathmorphing,calc,shadows,shadows.blur,shapes.multipart,positioning,patterns,fit,backgrounds,trees,shapes}
+
 \tikzset{
     %Define standard arrow tip
     >=stealth',
@@ -97,6 +98,28 @@ SmallCapsFeatures={Letters=SmallCaps},
     alt/.code args={<#1>#2#3}{%
       \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
     },
+  }
+\pgfdeclaredecoration{penciline}{initial}{
+    \state{initial}[width=+\pgfdecoratedinputsegmentremainingdistance,
+    auto corner on length=1mm,]{
+        \pgfpathcurveto%
+        {% From
+            \pgfqpoint{\pgfdecoratedinputsegmentremainingdistance}
+                      {\pgfdecorationsegmentamplitude}
+        }
+        {%  Control 1
+        \pgfmathrand
+        \pgfpointadd{\pgfqpoint{\pgfdecoratedinputsegmentremainingdistance}{0pt}}
+                    {\pgfqpoint{-\pgfdecorationsegmentaspect
+                     \pgfdecoratedinputsegmentremainingdistance}%
+                               {\pgfmathresult\pgfdecorationsegmentamplitude}
+                    }
+        }
+        {%TO
+        \pgfpointadd{\pgfpointdecoratedinputsegmentlast}{\pgfpoint{1pt}{1pt}}
+        }
+    }
+    \state{final}{}
   }
 \usepackage{amsmath}
 \usepackage{textpos}
@@ -159,8 +182,6 @@ SmallCapsFeatures={Letters=SmallCaps},
 %   }
 % }
 \setcounter{tocdepth}{1}
-
-\usetikzlibrary{arrows,arrows.meta,shapes,decorations.pathmorphing,calc,shadows,shadows.blur,shapes.multipart,positioning}
 
 %%%%%%%%%%%%%%%
 % Intro slide %
@@ -239,6 +260,7 @@ SmallCapsFeatures={Letters=SmallCaps},
 
 \begin{frame}{Other names for Managed Runtime Systems}
   \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Managed Runtime Environments
   \item Managed Runtimes
   \item Virtual Machines
   \item Process Virtual Machines
@@ -395,6 +417,32 @@ SmallCapsFeatures={Letters=SmallCaps},
     Web Backend  & Throughput  & High   & \$          & --      \\
     Server Apps  & Both        & High   & \$          & --      \\
   \end{tabular}
+\end{frame}
+
+\begin{frame}
+  \centering
+  {No VM to rule them all!!!}\\
+  \pause Yet!?
+\end{frame}
+
+\begin{frame}{Key features of a successful VM}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Fast
+  \item Energy Efficient
+  \item Secure
+  \item Modular
+  \item Built-in Concurrency Support
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Nice to have features}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Maintainable
+  \item Polyglot!?
+  \item Fault tolerance
+  \item Support for accelerators/heterogeneous systems
+  \item Small memory footprint
+  \end{itemize}
 \end{frame}
 
 % Closing slide
