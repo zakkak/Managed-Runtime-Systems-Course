@@ -106,18 +106,23 @@
 % % Footline in every slideexcept title
 \setbeamertemplate{footline}{
   \leavevmode%
-  \begin{beamercolorbox}[left,wd=.5\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm, rightskip=.3cm plus1fil]{footline}%
+  \begin{beamercolorbox}[left,wd=.4\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm, rightskip=.3cm plus1fil]{footline}%
     \insertshorttitle%
-  \end{beamercolorbox}\hspace{-.1\paperwidth}%
-%
-  \begin{beamercolorbox}[right,wd=.6\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{footline}%
-  \hskip2ex plus1fill%
-  \includegraphics[height=1.5ex]{cc}~%
-  \includegraphics[height=1.5ex]{by}~~%
-  % \includegraphics[height=1.5ex]{sa}~~%
-  \insertshortauthor~%
+  \end{beamercolorbox}
+  %
+  \begin{beamercolorbox}[center,wd=.2\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{footline}%
+    \centering
+    \insertframenumber~of~\inserttotalframenumber%
   \end{beamercolorbox}%
-  }%
+  %
+  \begin{beamercolorbox}[right,wd=.4\paperwidth,ht=2.5ex,dp=1.125ex,leftskip=.3cm,rightskip=.3cm plus1fil]{footline}%
+    \hskip2ex plus1fill%
+    \includegraphics[height=1.5ex]{cc}~%
+    \includegraphics[height=1.5ex]{by}~~%
+    % \includegraphics[height=1.5ex]{sa}~~%
+    \insertshortauthor~%
+  \end{beamercolorbox}%
+}%
 % -------------------------------
 %%% 7.2.2 The Sidebars
 % -------------------------------
