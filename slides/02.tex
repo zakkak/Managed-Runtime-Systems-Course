@@ -349,18 +349,29 @@ field_info {
 \end{lstlisting}
 \end{frame}
 
+\begin{frame}{Java fields}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Reference (Size is implementation-dependent)
+  \item Primitive
+    \begin{itemize}
+    \item 8, 16, 32, or 64-bit Integer (\texttt{byte}, \texttt{short}, \texttt{int}, \texttt{long}, \texttt{boolean}, \texttt{char})
+    \item 32 or 64-bit IEEE 754 floating-point (\texttt{float}, \texttt{double})
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Field Descriptors}
   \begin{tabular}{l | l | l}
-    B             & byte      &                                                                       \\
-    C             & char      &                                                                       \\
-    D             & double    &                                                                       \\
-    F             & float     &                                                                       \\
-    I             & int       &                                                                       \\
-    J             & long      &                                                                       \\
-    L \textit{ClassName} ; & reference & \texttt{Ljava/lang/String;}                                           \\
-    S             & short     &                                                                       \\
-    Z             & boolean   &                                                                       \\\relax
-    [             & long      & \texttt{[I} ~~ \texttt{[[[D} ~~  \texttt{[Ljava/lang/Object;} \\
+    B                      & byte      &                                                               \\
+    C                      & char      &                                                               \\
+    D                      & double    &                                                               \\
+    F                      & float     &                                                               \\
+    I                      & int       &                                                               \\
+    J                      & long      &                                                               \\
+    L \textit{ClassName} ; & reference & \texttt{Ljava/lang/String;}                                   \\
+    S                      & short     &                                                               \\
+    Z                      & boolean   &                                                               \\\relax
+    [                      & array     & \texttt{[I} ~~ \texttt{[[[D} ~~  \texttt{[Ljava/lang/Object;} \\
   \end{tabular}
 \end{frame}
 
@@ -475,18 +486,6 @@ Code_attribute {
     \node[field, below=0mm of elements] (elementn) {element n};
   \end{tikzpicture}
 \end{frame}
-
-\begin{frame}{Java fields}
-  \begin{itemize}  \setlength{\itemsep}{\fill}
-  \item Reference (Size is implementation-dependent)
-  \item Primitive
-    \begin{itemize}
-    \item 8, 16, 32, or 64-bit Integer (\texttt{byte}, \texttt{short}, \texttt{int}, \texttt{long}, \texttt{boolean}, \texttt{char})
-    \item 32 or 64-bit IEEE 754 floating-point (\texttt{float}, \texttt{double})
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
 
 
 % Closing slide
