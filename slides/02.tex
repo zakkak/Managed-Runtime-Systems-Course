@@ -229,7 +229,7 @@ SmallCapsFeatures={Letters=SmallCaps},
 
   \scriptsize
   \begin{tikzpicture}[decoration=penciline]
-    \node (source) [file] {.c};
+    \node (source) [file] {.java};
     \node (bytecode) [file, right=of source] {.class};
 
     \draw[arrow] (source) -- (bytecode) node[midway,above] {\texttt{javac}};
