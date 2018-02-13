@@ -9,3 +9,4 @@
 *.gz
 *.fdb_latexmk
 /slides/*.pdf
+*.vrb

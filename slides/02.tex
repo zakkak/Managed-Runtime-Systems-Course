@@ -1,0 +1,516 @@
+% -*- mode: latex; TeX-master: t; -*-
+
+% \documentclass[notes=hide]{beamer}
+% \documentclass[notes=only]{beamer}
+\documentclass[
+14pt,
+aspectratio=169,
+usenames,
+dvipsnames,
+% handout,
+x11names]{beamer}
+%\let\Tiny=\tiny
+
+% Font selection
+\overfullrule=5pt
+
+\usepackage{etex}
+\usepackage{pgfpages}
+
+\usepackage{tabularx}
+\usepackage{multicol}
+% \usepackage[subfolder]{gnuplottex}
+
+%% beamerscape dependencies
+\usepackage[absolute,overlay]{textpos}
+\setlength{\TPHorizModule}{\paperwidth}
+\setlength{\TPVertModule}{\paperheight}
+\textblockorigin{0mm}{0mm}
+
+\definecolor{greenvm}{HTML}{AFD18E}
+\definecolor{g}{HTML}{0E3B12}
+\definecolor{v}{HTML}{003366}
+
+\newcommand{\src}[1]{\scriptsize Figure Source: \textit{#1}}
+
+\input{theme/beamerpreamble}
+
+\renewcommand{\footnoterule}{}
+
+\usepackage{hyperref}
+\hypersetup{
+  linktoc=all,
+  bookmarks=false,           % show bookmarks bar?
+  bookmarksopen,
+  bookmarksnumbered,
+  colorlinks = false,
+  linkcolor=black,           % color of interlinks
+  citecolor=black,           % color of the sitation links
+  urlcolor=black,            % the url color
+  unicode=true,              % non-Latin characters in Acrobat’s bookmarks
+  pdftoolbar=true,           % show Acrobat’s toolbar?
+  pdfmenubar=true,           % show Acrobat’s menu?
+  pdffitwindow=true,         % window fit to page when opened
+  pdftitle={Managed Runtime Systems},  % title
+  pdfborder={ 0 0 0 },        % uBorder tin links
+  pdfauthor = {Foivos Zakkak},
+  pdfcreator = {Foivos Zakkak},
+}
+
+\usefonttheme{professionalfonts}% use own font handling
+\usepackage{fontspec}
+\usepackage{xunicode}
+% \setmainfont{Comfortaa}
+% \setsansfont{Comfortaa}
+% \setsansfont{Liberation Sans}
+\setmainfont[
+% SmallCapsFont={Linux Biolinum},
+SmallCapsFeatures={Letters=SmallCaps},
+]{Liberation Sans}
+% \setmonofont{Liberation Mono}
+% \setmonofont{Inconsolata LGC for Powerline}
+% Math fonts
+\usepackage{unicode-math}
+\setmathfont{xits-math.otf}
+
+\usepackage{graphicx}
+\usepackage{ulem}
+\usepackage{color}
+\usepackage{xspace}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{arrows,arrows.meta,shapes,decorations,decorations.pathmorphing,calc,shadows,shadows.blur,shapes.multipart,positioning,patterns,fit,backgrounds,trees,shapes}
+
+\tikzset{
+    %Define standard arrow tip
+    >=stealth',
+    % Define arrow style
+    arrow/.style={
+           ->,
+           thick,
+           color=uompurple,
+           shorten <=2pt,
+           shorten >=4pt,},
+    % Daniel's proposal for "uncovering" parts of a tikz-tree %
+    invisible/.style={opacity=0},
+    visible on/.style={alt=#1{}{invisible}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+  }
+\pgfdeclaredecoration{penciline}{initial}{
+    \state{initial}[width=+\pgfdecoratedinputsegmentremainingdistance,
+    auto corner on length=1mm,]{
+        \pgfpathcurveto%
+        {% From
+            \pgfqpoint{\pgfdecoratedinputsegmentremainingdistance}
+                      {\pgfdecorationsegmentamplitude}
+        }
+        {%  Control 1
+        \pgfmathrand
+        \pgfpointadd{\pgfqpoint{\pgfdecoratedinputsegmentremainingdistance}{0pt}}
+                    {\pgfqpoint{-\pgfdecorationsegmentaspect
+                     \pgfdecoratedinputsegmentremainingdistance}%
+                               {\pgfmathresult\pgfdecorationsegmentamplitude}
+                    }
+        }
+        {%TO
+        \pgfpointadd{\pgfpointdecoratedinputsegmentlast}{\pgfpoint{1pt}{1pt}}
+        }
+    }
+    \state{final}{}
+  }
+\usepackage{amsmath}
+\usepackage{textpos}
+% \usepackage{subfigure}
+
+\graphicspath{{figures/}}
+% \newcommand{\longname}{\emph{Source-Level Compiler Optimizations for Task-Parallelism}}
+\newcommand{\java}[0]{Java\texttrademark\xspace}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\usepackage{bbding} % for the Checkmark and XSolidBrush
+\newcommand{\tik}[0]{{\color{green}\Checkmark}} % Check-mark
+\newcommand{\ex}[0]{{\color{red}\XSolidBrush}}  % X-mark
+
+% \usepackage{verbatim}
+\usepackage{listings}
+\lstset{
+  language=c,
+  basicstyle=\scriptsize\ttfamily,
+%  columns=flexible,
+  % numbers=left,
+  % numberstyle=\ttfamily\tiny,
+  showstringspaces=false,
+  alsoletter={-},
+  literate={-}{-}1,
+%  numbersep=1em,
+  xleftmargin=2em,
+%  xrightmargin=1em,
+  escapeinside={@}{@},
+%  morecomment=[l][\color{BrickRed}]{\#pragma\ task},
+  commentstyle=\color{black},
+  morekeywords={final, transient, synthetic},
+%   identifierstyle=\color{green},
+%  backgroundcolor=\color{Honeydew1},
+  keywordstyle=\bfseries\color{myyellow},
+  stringstyle=\color{YellowGreen},
+%  moredelim=**[is][\only<+(1)->{\color{black}\lstset{style=highlight}}]{~}{~},
+}
+
+\usepackage{booktabs} % bottomrule
+\usepackage{multirow}
+
+% Print table of contects at the beggining of each section
+% \AtBeginSection[]{\begin{frame}\frametitle{Table of Contents}\tableofcontents[currentsection,currentsubsection]\end{frame}}
+% \AtBeginSubsection[]{\begin{frame}\frametitle{Table of Contents}\tableofcontents[currentsection,currentsubsection]\end{frame}}
+
+% Add outlines
+% \AtBeginSection[]
+% {
+%   {
+%   \setbeamertemplate{footline}{}
+%   \begin{frame}<beamer>[plain,noframenumbering]
+%     \frametitle{Outline}
+%     \tableofcontents[currentsection]
+%   \end{frame}
+%   }
+% }
+\setcounter{tocdepth}{1}
+
+%%%%%%%%%%%%%%%
+% Intro slide %
+%%%%%%%%%%%%%%%
+
+\title{Managed Runtime Systems}
+\subtitle{Lecture 02: The \java Virtual Machine}
+\author[\url{https://foivos.zakkak.net}]{Foivos Zakkak}
+% \institute[]{ManLang'17}
+\date{\url{https://foivos.zakkak.net}}
+% \logo{\includegraphics[height=1.0cm]{uniman-logo}}
+%% Spread those bullets
+% \let\olditem\item
+% \renewcommand{\item}{\setlength{\itemsep}{\fill}\olditem}
+
+\begin{document}
+\setbeamercovered{invisible}
+
+% \maketitle
+
+\begin{frame}[plain]
+  \titlepage
+  \centering
+  \includegraphics[height=.75cm]{cc}~
+  \includegraphics[height=.75cm]{by}\\[1em]
+  % \includegraphics[height=.75cm]{nc-eu}~
+  % \includegraphics[height=.75cm]{sa}\\[1em]
+  \scriptsize{Except where otherwise noted, this presentation is licensed under the\\
+    \href{http://creativecommons.org/licenses/by/4.0/}%
+    {Creative Commons Attribution 4.0 International License.}\\[1ex]
+    Third party marks and brands are the property of their respective
+    holders.}
+\end{frame}
+
+% \begin{frame}[plain,noframenumbering]{Outline}
+%     \tableofcontents
+% \end{frame}
+
+\section{The Java Virtual Machine}
+
+\begin{frame}[fragile]{The JVM Architecture}
+  \centering
+
+  \tikzstyle{file} = [decorate,text=black, fill=Dandelion, rectangle, minimum width=1cm, minimum height=1.7cm]
+  \tikzstyle{arrow} = [->,thick]
+  \tikzstyle{darrow} = [<->,thick]
+  \tikzstyle{component} = [text=black, fill=white, rectangle, minimum width=2cm, minimum height=1cm]
+  \tikzstyle{memory} = [component]
+
+  \scriptsize
+  \begin{tikzpicture}[decoration=penciline]
+    \node (source) [file] {.c};
+    \node (bytecode) [file, right=of source] {.class};
+
+    \draw[arrow] (source) -- (bytecode) node[midway,above] {\texttt{javac}};
+
+    \node (classloader) [component, right=of bytecode, fill=BrickRed, text=white] {Class Loader};
+
+    \draw[arrow] (bytecode) -- (classloader) node[midway,above] {\texttt{java}};
+
+    \node (methoda) [memory, below left=of bytecode] {Method Area};
+    \node (heapa) [memory, right=5mm of methoda] {Heap Area};
+    \node (stacka) [memory, right=5mm of heapa] {Stack Area};
+    \node (pcregistera) [memory, right=5mm of stacka] {PC Register};
+    \node (nativea) [memory, right=5mm of pcregistera] {Native Stack};
+
+    \node[fit=(methoda)(nativea), draw=YellowGreen, thick, inner sep=3mm] (data) {};
+    \node[text=YellowGreen, thick, above=3mm of methoda] {\small Data locations};
+
+    \draw[darrow] (classloader) -- (data);
+
+    \node (exec) [memory, below=of heapa, fill=BrickRed, text=white] {Execution Engine};
+    \node (nativem) [memory, right=of exec] {Native Methods Interface};
+    \node (nativelib) [memory, right=of nativem] {Native Libraries};
+
+    \draw[darrow] (exec) -- ($ (exec.north) + (0,.7) $);
+    \draw[darrow] (exec) -- (nativem);
+    \draw[darrow] (nativem) -- ($ (nativem.north) + (0,.7) $);
+    \draw[arrow] (nativelib) -- (nativem);
+
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Class loading}
+  \begin{enumerate}
+  \item Verification
+  \item Preparation of JVM internal data structures
+  \item Resolution of references (might load other classes)
+  \item Initialization
+  \end{enumerate}
+\end{frame}
+
+\note[itemize]{
+\item Loading: A class is obtained from a file and loaded to the JVM memory.
+\item Verifying: Check whether or not the read class is configured as described in the Java Language Specification and JVM specifications. This is the most complicated test process of the class load processes, and takes the longest time. Most cases of the JVM TCK test cases are to test whether or not a verification error occurs by loading wrong classes.
+\item Preparing: Prepare a data structure that assigns the memory required by classes and indicates the fields, methods, and interfaces defined in the class.
+\item Resolving: Change all symbolic references in the constant pool of the class to direct references.
+\item Initializing: Initialize the class variables to proper values. Execute the static initializers and initialize the static fields to the configured values.
+}
+
+\begin{frame}[fragile]{Java Class file}
+  \begin{columns}
+    \begin{column}{.7\linewidth}
+\begin{lstlisting}
+ClassFile {
+  u4             magic;
+  u2             minor_version;
+  u2             major_version;
+  u2             constant_pool_count;
+  cp_info        constant_pool[constant_pool_count-1];
+  u2             access_flags;
+  u2             this_class;
+  u2             super_class;
+  u2             interfaces_count;
+  u2             interfaces[interfaces_count];
+  u2             fields_count;
+  field_info     fields[fields_count];
+  u2             methods_count;
+  method_info    methods[methods_count];
+  u2             attributes_count;
+  attribute_info attributes[attributes_count];
+}
+\end{lstlisting}
+    \end{column}
+    \begin{column}{.3\linewidth}
+      \centering
+
+      \tikzstyle{stack} = [rectangle, draw, minimum width=3cm, thick]
+      \tikzstyle{arrow} = [->, thick]
+
+      \scriptsize
+      \begin{tikzpicture}
+        \node[stack] (f0) {magic};
+        \node[stack, below=0mm of f0] (f1) {minor-major version};
+        % \node[stack, below=0mm of f1] (f2) {major version};
+        \node[stack, below=0mm of f1] (f3) {constant pool count};
+        \node[stack, below=0mm of f3, draw=YellowGreen, text=YellowGreen] (f4) {constant pool[]};
+        \node[stack, below=0mm of f4] (f5) {access flags};
+        \node[stack, below=0mm of f5] (f6) {this class};
+        \node[stack, below=0mm of f6] (f7) {super class};
+        \node[stack, below=0mm of f7] (f8) {interfaces count};
+        \node[stack, below=0mm of f8] (f9) {interfaces[]};
+        \node[stack, below=0mm of f9] (f10) {fields count};
+        \node[stack, below=0mm of f10] (f11) {fields[]};
+        \node[stack, below=0mm of f11] (f12) {methods count};
+        \node[stack, below=0mm of f12] (f13) {methods[]};
+        \node[stack, below=0mm of f13] (f14) {attributes count};
+        \node[stack, below=0mm of f14] (f15) {attributes[]};
+
+        \draw[arrow] (f6.east) to[bend right] (f4.east);
+        \draw[arrow] (f7.east) to[bend right] (f4.east);
+        \draw[arrow] (f9.east) to[bend right] (f4.east);
+
+      \end{tikzpicture}
+    \end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Field Info}
+\begin{lstlisting}
+field_info {
+  u2 access_flags; // public, private, protected, static, final,
+                   // volatile, transient, synthetic, enum
+  u2 name_index;
+  u2 descriptor_index;
+  u2 attributes_count;
+  attribute_info attributes[attributes_count]; // e.g., Deprecated
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Field Descriptors}
+  \begin{tabular}{l | l | l}
+    B             & byte      &                                                                       \\
+    C             & char      &                                                                       \\
+    D             & double    &                                                                       \\
+    F             & float     &                                                                       \\
+    I             & int       &                                                                       \\
+    J             & long      &                                                                       \\
+    L \textit{ClassName} ; & reference & \texttt{Ljava/lang/String;}                                           \\
+    S             & short     &                                                                       \\
+    Z             & boolean   &                                                                       \\\relax
+    [             & long      & \texttt{[I} ~~ \texttt{[[[D} ~~  \texttt{[Ljava/lang/Object;} \\
+  \end{tabular}
+\end{frame}
+
+\begin{frame}[fragile]{Method Info}
+\begin{lstlisting}
+method_info {
+  u2 access_flags; // public, private, native, var args, synthetic ...
+  u2 name_index;
+  u2 descriptor_index;
+  u2 attributes_count;
+  attribute_info attributes[attributes_count]; // e.g., Code, Exceptions
+}
+\end{lstlisting}
+\begin{exampleblock}{Method Descriptors}
+  \texttt{void foo(int a, Object o)} => \texttt{(ILjava/lang/Object;)V}\\
+  \texttt{String bar(int[][] i)} => \texttt{([[I)Ljava/lang/String;}
+\end{exampleblock}
+\end{frame}
+
+\begin{frame}[fragile]{Code attribute}
+\begin{lstlisting}
+Code_attribute {
+  u2 attribute_name_index;
+  u4 attribute_length;
+  u2 max_stack;
+  u2 max_locals;
+  u4 code_length;
+  u1 code[code_length]; // The actual bytecode
+  u2 exception_table_length;
+  { u2 start_pc; // if catch_type is thrown between start_pc and end_pc,
+    u2 end_pc;   // execute handler at handler_pc
+    u2 handler_pc;
+    u2 catch_type;
+  } exception_table[exception_table_length];
+  u2 attributes_count;
+  attribute_info attributes[attributes_count]; // line numbers, stack maps,...
+}
+\end{lstlisting}
+\end{frame}
+
+\section{Runtime}
+
+\begin{frame}{Java Stack vs Native Stack}
+  \centering
+
+  \tikzstyle{frame} = [rectangle, draw, thick, minimum width=2cm, minimum height=.75cm]
+  \tikzstyle{stack} = [rectangle, draw, minimum width=2.5cm]
+
+  \scriptsize
+  \begin{tikzpicture}
+    \node (title) {Java Stack};
+
+    \node[frame, below=of title] (frame1) {frame};
+    \node[frame, below=2mm of frame1, draw=YellowGreen] (frame2) {frame};
+    \node[frame, below=2mm of frame2] (frame3) {frame};
+
+    \node[fit=(title)(frame3), draw, thick, inner sep=3mm] (jstack) {};
+
+    \draw[->, thick] ($(frame1.north) + (0,2mm) $) -- ($(title.south) - (0,2mm) $);
+
+    \node[right=2cm of jstack.north east, below, align=center] (frametitle) {~\\[2ex]Frame};
+
+    \node[stack, below=of frametitle] (oper2) {operand stack 2};
+    \node[stack, below=0mm of oper2] (oper1) {operand stack 1};
+    \node[stack, below=0mm of oper1] (oper0) {operand stack 0};
+    \node[stack, below=0mm of oper0] (localn) {local variable n};
+    \node[stack, below=0mm of localn] (localdot) {\large$\vdots$};
+    \node[stack, below=0mm of localdot] (local1) {local variable 1};
+    \node[stack, below=0mm of local1] (local0) {local variable 0};
+    \node[stack, below=0mm of local0] (ra) {return address};
+
+    \node[fit=(frametitle)(ra), draw=YellowGreen, thick, inner sep=0mm] (jstack) {};
+
+    \draw[->, thick] ($(oper2.north) + (0,2mm) $) -- ($(frametitle.south) - (0,2mm) $);
+
+    \draw[thick, dashed, draw=YellowGreen] (frame2.north east) -- (jstack.north west);
+    \draw[thick, dashed, draw=YellowGreen] (frame2.south east) -- (jstack.south west);
+
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Java Threads}
+  \begin{itemize}
+  \item A Program Counter\footnote{Class+method+bytecode-offset or native code pointer}
+  \item A Java Stack
+  \item Native stack
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Java Objects and Arrays}
+  \centering
+
+  \tikzstyle{field} = [rectangle, draw, thick, minimum width=2.5cm]
+
+  \scriptsize
+  \begin{tikzpicture}
+    \node (object) {\textbf{Object}};
+
+    \node[field, below=3mm of object, fill=PineGreen] (cheader) {header};
+    \node[field, below=0mm of cheader] (field0) {field 0};
+    \node[field, below=0mm of field0] (field1) {field 1};
+    \node[field, below=0mm of field1] (fields) {\large$\vdots$};
+    \node[field, below=0mm of fields] (fieldn) {field n};
+
+    \node[right=4cm of object] (array) {\textbf{Array}};
+
+    \node[field, below=3mm of array, fill=PineGreen] (aheader) {header};
+    \node[field, below=0mm of aheader] (length) {length};
+    \node[field, below=0mm of length] (element0) {element 0};
+    \node[field, below=0mm of element0] (element1) {element 1};
+    \node[field, below=0mm of element1] (elements) {\large$\vdots$};
+    \node[field, below=0mm of elements] (elementn) {element n};
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Java fields}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Reference (Size is implementation-dependent)
+  \item Primitive
+    \begin{itemize}
+    \item 8, 16, 32, or 64-bit Integer (\texttt{byte}, \texttt{short}, \texttt{int}, \texttt{long}, \texttt{boolean}, \texttt{char})
+    \item 32 or 64-bit IEEE 754 floating-point (\texttt{float}, \texttt{double})
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+
+
+% Closing slide
+% \subsection{Closure}
+% % {
+% % \setbeamertemplate{footline}{}
+% % \begin{frame}[noframenumbering]
+% %  \frametitle{\fontspec{Purisa}\textbf{Thank You!}}
+% %  \centering
+% %  \titlepage
+% % \end{frame}
+% % }
+% \begin{frame}
+%   % \centering
+%   \Huge
+%   \alert{Can managed programming languages run on future
+%   many-core architectures?}
+%   % \vspace{-2em}
+%   \vfill
+%   \begin{flushright}
+%     \fontspec{Purisa}\structure{Thank You!}
+%   \end{flushright}
+% \end{frame}
+
+%   BACKUP SLIDES
+
+\end{document}
