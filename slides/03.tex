@@ -1,0 +1,583 @@
+% -*- mode: latex; TeX-master: t; -*-
+
+% \documentclass[notes=hide]{beamer}
+% \documentclass[notes=only]{beamer}
+\documentclass[
+14pt,
+aspectratio=169,
+usenames,
+dvipsnames,
+% handout,
+x11names]{beamer}
+%\let\Tiny=\tiny
+
+% Font selection
+\overfullrule=5pt
+
+\usepackage{etex}
+\usepackage{pgfpages}
+
+\usepackage{tabularx}
+\usepackage{multicol}
+% \usepackage[subfolder]{gnuplottex}
+
+%% beamerscape dependencies
+\usepackage[absolute,overlay]{textpos}
+\setlength{\TPHorizModule}{\paperwidth}
+\setlength{\TPVertModule}{\paperheight}
+\textblockorigin{0mm}{0mm}
+
+\definecolor{greenvm}{HTML}{AFD18E}
+\definecolor{g}{HTML}{0E3B12}
+\definecolor{v}{HTML}{003366}
+
+\newcommand{\src}[1]{\scriptsize Figure Source: \textit{#1}}
+
+\input{theme/beamerpreamble}
+
+\renewcommand{\footnoterule}{}
+
+\usepackage{hyperref}
+\hypersetup{
+  linktoc=all,
+  bookmarks=false,           % show bookmarks bar?
+  bookmarksopen,
+  bookmarksnumbered,
+  colorlinks = false,
+  linkcolor=black,           % color of interlinks
+  citecolor=black,           % color of the sitation links
+  urlcolor=black,            % the url color
+  unicode=true,              % non-Latin characters in Acrobat’s bookmarks
+  pdftoolbar=true,           % show Acrobat’s toolbar?
+  pdfmenubar=true,           % show Acrobat’s menu?
+  pdffitwindow=true,         % window fit to page when opened
+  pdftitle={Managed Runtime Systems},  % title
+  pdfborder={ 0 0 0 },        % uBorder tin links
+  pdfauthor = {Foivos Zakkak},
+  pdfcreator = {Foivos Zakkak},
+}
+
+\usefonttheme{professionalfonts}% use own font handling
+\usepackage{fontspec}
+\usepackage{xunicode}
+% \setmainfont{Comfortaa}
+% \setsansfont{Comfortaa}
+% \setsansfont{Liberation Sans}
+\setmainfont[
+% SmallCapsFont={Linux Biolinum},
+SmallCapsFeatures={Letters=SmallCaps},
+]{Liberation Sans}
+% \setmonofont{Liberation Mono}
+% \setmonofont{Inconsolata LGC for Powerline}
+% Math fonts
+\usepackage{unicode-math}
+\setmathfont{xits-math.otf}
+
+\usepackage{graphicx}
+\usepackage{ulem}
+\usepackage{color}
+\usepackage{xspace}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{arrows,arrows.meta,shapes,decorations,decorations.pathmorphing,calc,shadows,shadows.blur,shapes.multipart,positioning,patterns,fit,backgrounds,trees,shapes}
+
+\tikzset{
+    %Define standard arrow tip
+    >=stealth',
+    % Define arrow style
+    arrow/.style={
+           ->,
+           thick,
+           color=uompurple,
+           shorten <=2pt,
+           shorten >=4pt,},
+    % Daniel's proposal for "uncovering" parts of a tikz-tree %
+    invisible/.style={opacity=0},
+    visible on/.style={alt=#1{}{invisible}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+  }
+\pgfdeclaredecoration{penciline}{initial}{
+    \state{initial}[width=+\pgfdecoratedinputsegmentremainingdistance,
+    auto corner on length=1mm,]{
+        \pgfpathcurveto%
+        {% From
+            \pgfqpoint{\pgfdecoratedinputsegmentremainingdistance}
+                      {\pgfdecorationsegmentamplitude}
+        }
+        {%  Control 1
+        \pgfmathrand
+        \pgfpointadd{\pgfqpoint{\pgfdecoratedinputsegmentremainingdistance}{0pt}}
+                    {\pgfqpoint{-\pgfdecorationsegmentaspect
+                     \pgfdecoratedinputsegmentremainingdistance}%
+                               {\pgfmathresult\pgfdecorationsegmentamplitude}
+                    }
+        }
+        {%TO
+        \pgfpointadd{\pgfpointdecoratedinputsegmentlast}{\pgfpoint{1pt}{1pt}}
+        }
+    }
+    \state{final}{}
+  }
+\usepackage{amsmath}
+\usepackage{textpos}
+% \usepackage{subfigure}
+
+\graphicspath{{figures/}}
+% \newcommand{\longname}{\emph{Source-Level Compiler Optimizations for Task-Parallelism}}
+\newcommand{\java}[0]{Java\texttrademark\xspace}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\usepackage{bbding} % for the Checkmark and XSolidBrush
+\newcommand{\tik}[0]{{\color{green}\Checkmark}} % Check-mark
+\newcommand{\ex}[0]{{\color{red}\XSolidBrush}}  % X-mark
+
+% \usepackage{verbatim}
+\usepackage{listings}
+\lstset{
+  language=c,
+  basicstyle=\scriptsize\ttfamily,
+%  columns=flexible,
+  % numbers=left,
+  % numberstyle=\ttfamily\tiny,
+  showstringspaces=false,
+  alsoletter={-},
+  literate={-}{-}1,
+%  numbersep=1em,
+  xleftmargin=2em,
+%  xrightmargin=1em,
+  escapeinside={@}{@},
+%  morecomment=[l][\color{BrickRed}]{\#pragma\ task},
+  commentstyle=\color{black},
+  morekeywords={final, transient, synthetic},
+%   identifierstyle=\color{green},
+%  backgroundcolor=\color{Honeydew1},
+  keywordstyle=\bfseries\color{myyellow},
+  stringstyle=\color{YellowGreen},
+%  moredelim=**[is][\only<+(1)->{\color{black}\lstset{style=highlight}}]{~}{~},
+}
+
+\usepackage{booktabs} % bottomrule
+\usepackage{multirow}
+
+% Print table of contects at the beggining of each section
+% \AtBeginSection[]{\begin{frame}\frametitle{Table of Contents}\tableofcontents[currentsection,currentsubsection]\end{frame}}
+% \AtBeginSubsection[]{\begin{frame}\frametitle{Table of Contents}\tableofcontents[currentsection,currentsubsection]\end{frame}}
+
+% Add outlines
+% \AtBeginSection[]
+% {
+%   {
+%   \setbeamertemplate{footline}{}
+%   \begin{frame}<beamer>[plain,noframenumbering]
+%     \frametitle{Outline}
+%     \tableofcontents[currentsection]
+%   \end{frame}
+%   }
+% }
+\setcounter{tocdepth}{1}
+
+%%%%%%%%%%%%%%%
+% Intro slide %
+%%%%%%%%%%%%%%%
+
+\title{Managed Runtime Systems}
+\subtitle{Lecture 03: Memory Management}
+\author[\url{https://foivos.zakkak.net}]{Foivos Zakkak}
+% \institute[]{ManLang'17}
+\date{\url{https://foivos.zakkak.net}}
+% \logo{\includegraphics[height=1.0cm]{uniman-logo}}
+%% Spread those bullets
+% \let\olditem\item
+% \renewcommand{\item}{\setlength{\itemsep}{\fill}\olditem}
+
+\begin{document}
+\setbeamercovered{invisible}
+
+% \maketitle
+
+\begin{frame}[plain]
+  \titlepage
+  \centering
+  \includegraphics[height=.75cm]{cc}~
+  \includegraphics[height=.75cm]{by}\\[1em]
+  % \includegraphics[height=.75cm]{nc-eu}~
+  % \includegraphics[height=.75cm]{sa}\\[1em]
+  \scriptsize{Except where otherwise noted, this presentation is licensed under the\\
+    \href{http://creativecommons.org/licenses/by/4.0/}%
+    {Creative Commons Attribution 4.0 International License.}\\[1ex]
+    Third party marks and brands are the property of their respective
+    holders.}
+\end{frame}
+
+% \begin{frame}[plain,noframenumbering]{Outline}
+%     \tableofcontents
+% \end{frame}
+
+\begin{frame}{Acknowledgments}
+  The following slides are based on the corresponding slides of Mario Walczko about Memory Management:
+
+  \begin{itemize}
+  \item \href{https://www.dropbox.com/s/bnwq1q677spkglp/7\%20Memory\%20management.pdf}{Memory management part 1}
+  \item \href{https://www.dropbox.com/s/gxsuu4uqbgwo88f/7B\%20Memory\%20Management\%2C\%20part\%202.pdf}{Memory management part 2}
+  \item \href{https://www.dropbox.com/s/f0lwnc9zjtw8dxy/7C\%20Debugging\%20hints.pdf}{Memory management debugging hints}
+\end{itemize}
+\end{frame}
+
+\section{Memory Management Introduction}
+
+\begin{frame}{Memory Management Introduction}
+  \centering
+  Static vs Dynamic Allocation
+\end{frame}
+
+\begin{frame}{Static Memory Allocation}
+
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Binding of name to memory addresses at \alert{compile/link} time
+  \item All sizes are fixed, i.e. \alert{known at compile time}
+  \item \alert{No stack} allocation
+  \item Used in early FORTRAN, BASIC and various languages for \alert{embedded/real-time systems}
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Static Memory Allocation}
+
+  Pros \tik
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item \alert{No runtime overheads} for allocation/de-allocation
+  \item Memory requirements \alert{known at compile time}
+  \item \alert{No failures} due to lack of memory
+  \end{itemize}
+
+  \pause
+
+  Cons \ex
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Need to allocate and keep \alert{the maximum possible memory footprint} for the whole program execution
+  \item \alert{No recursion} due to lack of stack allocation
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Dynamic Allocation (on the stack)}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Languages (at least most of them) are \alert{based on procedures}
+  \item \alert{LIFO/Depth-First} invocation order (in most cases\footnote{See Scheme and Smalltalk for counter-examples})
+  \item Memory used by procedures can be \alert{managed as a stack}
+  \item \alert{Hardware support} (SP register, call/ret instr.) since the 1960s
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamic Allocation (on the stack)}
+
+  Pros \tik
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item \alert{Low runtime overheads}
+  \item \alert{Bump stack pointer} for allocation
+  \item \alert{Bulk} de-allocation on return
+  \item No \alert{memory leaks}
+  \end{itemize}
+
+  \pause
+
+  Cons \ex
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Names passed as parameters, the deeper a procedure is invoked \alert{the more parameters it gets}
+  \item \alert{Cannot return memory} to previous procedures
+  \item Data-lifetime \alert{equals} the procedure's lifetime
+  \item Can't handle \alert{complex data structures} like graphs
+  \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Dynamic Allocation (on the heap)}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item \alert{Arbitrary requests} for memory segments
+  \item Allocations \alert{may fail}
+  \item Fast allocation vs Fast de-allocation \alert{trade-offs}
+  \item Heap may \alert{not be contiguous}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Dynamic Allocation (on the heap)}
+  Pros \tik
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item \alert{Arbitrary} allocation sizes
+  \item Allocation and de-allocation \alert{from different procedures}
+  \item Handling of \alert{complex data structures}
+  \end{itemize}
+
+  \pause
+
+  Cons \ex
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Noticeable \alert{runtime overheads}
+  \item Need to perform \alert{a de-allocation for each allocation}\footnote{See region-based allocation for an enhancement}
+  \item \alert{Memory leaks} are possible
+  \end{itemize}
+\end{frame}
+
+\section{Heap Allocation Algorithms}
+
+\begin{frame}{Heap Allocation: Free-list variations }
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item \alert{First-Fit}:
+    \begin{itemize}
+    \item Search free-list from the beginning, peek first block that fits
+    \item Add the remaining of the block (if any) as a new block to the list
+    \item May result in a number of small blocks at beginning of free-list
+    \end{itemize}
+  \item \alert{Best-Fit}:
+    \begin{itemize}
+    \item Search free-list from the beginning, peek the block that best fits
+    \item Add the remaining of the block (if any) as a new block to the list
+    \item Reduces fragmentation
+    \item Slow since we need to traverse the whole free-list
+    \end{itemize}
+  \item \alert{Next-Fit}:
+    \begin{itemize}
+    \item Search from where we stopped last time, peek the block that best fits
+    \item Add the remaining of the block (if any) as a new block to the list
+    \item Might increase fragmentation
+    \item Often faster than First-fit
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Fragmentation}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Fragmentation is the phenomenon of \alert{not being able to use parts of memory} because of inefficient management
+  \item A \alert{heavily fragmented} system may have \alert{plenty of free memory}, but chopped in small blocks that \alert{don't fit} a new request
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Fragmentation Categorization}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item \alert{Internal Fragmentation} is the result of allocating larger chunks than actually needed (often due to alignment restrictions)
+  \item \alert{External Fragmentation} is the result of constantly splitting free blocks, resulting in multiple small non-contiguous free blocks that cannot be used
+  \end{itemize}
+\end{frame}
+
+% Todo add animations for the above algorithms
+
+\begin{frame}{Free-list Allocation Main Overheads}
+  \begin{enumerate}  \setlength{\itemsep}{\fill}
+  \item Loop over free-blocks, even over obvious non-matches
+  \item For each block check if it fits
+  \item Split the block if it's bigger
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Single-size Free-lists}
+  \begin{enumerate}  \setlength{\itemsep}{\fill}
+  \item A set of free-lists, one for each size (for a set of common sizes)
+  \item A generic free-list for the rest
+  \item Always peek the first block from the list of the desired size
+  \item If empty take a block from the generic one and split it
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}
+  \centering
+  What about \alert{multi-threaded} applications???
+\end{frame}
+
+\section{Garbage Collection}
+
+\begin{frame}{Garbage Collection}
+  \begin{enumerate}  \setlength{\itemsep}{\fill}
+  \item Ease programming, no need to argue about object lifetimes
+  \item Eliminate errors due to dangling pointers
+  \item Take care of the previous issues
+  \item Still possible to leak memory!
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]{How does it work?}
+\begin{lstlisting}
+public static void main(String args[]) {
+  List<String> lines=
+    Files.readAllLines(Paths.get(args[0]), Charset.defaultCharset());
+  int nLines= lines.size();
+  // reclaim lines??
+  System.out.println(nLines);
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{Liveness}
+  \begin{itemize}
+  \item An object is \textit{dead} when it is \alert{no longer needed}
+    \pause
+    \begin{itemize}
+    \item ``But, VMs (and compilers) have severely limited crystal balls''\\
+      \hfill -- Mario Walczko
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Liveness in the Real World}
+  \begin{itemize}
+  \item An object is \textit{dead} when it is \alert{no longer reachable}
+    \begin{itemize}  \setlength{\itemsep}{\fill}
+    \item Reachable is an object that can be reached by following pointers starting from the system's roots
+    \item The system's roots are all the variables in scope (of all threads)
+    \item Requires traversal of stacks and globals
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+% todo draw example for reachability
+
+\subsection{Reference Counting}
+
+\begin{frame}{Reference Counting}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Keep a reference \alert{counter per object}
+  \item \alert{Increment} it when a reference to that object is assigned to a variable
+  \item \alert{Decrement} it when a reference to that object is overwritten
+  \item If the counter is \alert{zero}, the object \alert{can be reclaimed}
+  \end{itemize}
+\end{frame}
+
+% todo draw example for reference counting
+
+\begin{frame}{Reference Counting Drawbacks}
+  \begin{enumerate}  \setlength{\itemsep}{\fill}
+  \item Reference counting has to be \alert{performed on all variables}\\ (stack, global, and heap)
+  \item References in an activation record have to be \alert{decremented before de-allocating the frame} upon return
+  \item Decrementing the reference counter \alert{often incurs a cache miss}
+  \item Decrementing the reference counter \alert{always incurs a write}
+  \item Concurrent threads might \alert{contend on the reference counter}
+  \item \alert{Cannot reclaim cycles}
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Reference Counting Delay Reclamation}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Avoid \alert{unbound recursion}
+  \item \alert{Reduce the number of pauses} for Garbage Collection
+  \end{itemize}
+\end{frame}
+
+\subsection{Tracing Collection}
+
+\begin{frame}{Tracing Collection: Mark-n-Sweep}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Mark: Follow the system's roots and \alert{mark reachable objects}
+  \item Sweep: \alert{Reclaim unmarked objects} at the end
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Mark Implementations}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item \alert{Recursive}: Worst case each object creates an activation (a single linked-list)
+  \item \alert{Work queue}: Each object creates a new node in the queue
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Sweep Implementation}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Add reclaimed chunks to a \alert{free-list}
+  \item Requires \alert{parsing the whole heap} to find the non-marked objects
+    \begin{itemize}
+    \item  Possible (using the object headers), but \alert{inefficient}
+    \end{itemize}
+  \item \alert{Coalescing} adjacent free blocks
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Compacting Sweep}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Move \textit{live} objects to consecutive memory addresses
+    \begin{itemize}
+    \item Moving objects \alert{breaks references} though
+    \end{itemize}
+  \item Create a \alert{contiguous large free space} after the \textit{live} objects
+  \item Run on \alert{every collection} or when heap is \alert{heavily fragmented}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Compacting Sweep with Forwarding Pointers}
+  \alert{Amend} each object with a forwarding pointer in its header\\
+
+  \begin{enumerate}  \setlength{\itemsep}{\fill}
+  \item \alert{Compute} forwarding pointers
+  \item \alert{Update} all pointers using the forwarding pointers
+  \item \alert{Move} the objects
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Compacting Sweep with Temporary Table}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Instead of using a forwarding pointer \alert{replace actual header with pointer to a temporary table entry}
+  \item Each temporary table entry holds \alert{a header and a forwarding location}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Compacting Sweep with \textit{Threading}}
+  \begin{enumerate}  \setlength{\itemsep}{\fill}
+  \item Replace the object header with a pointer to a list
+  \item This starts from the object and goes through all the fields that reference it
+  \item The last field in the list contains the initial content of the object header
+  \item When the object is moved the list is traversed to update the corresponding fields
+  \end{enumerate}
+\end{frame}
+
+\subsection{Copying Collection}
+
+\begin{frame}{Copying Collection}
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item \alert{Trace and compaction} combination
+  \item \alert{Split memory} in \textit{from} and \textit{to} semi-spaces
+  \item \alert{Copy} \textit{live} object on trace to \textit{to} semi-space
+  \item \alert{Leave} forwarding pointers in \textit{from} semi-space
+  \item At the end, \textit{from} becomes \textit{to} and vice versa
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Copying Collection}
+  Pros \tik
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item \alert{Increase locality?}
+  \item \alert{Bump} allocation
+  \end{itemize}
+
+  \pause
+
+  Cons \ex
+  \begin{itemize}  \setlength{\itemsep}{\fill}
+  \item Requires \alert{twice the memory}
+  \item \alert{Copies the whole heap} in each collection
+  \end{itemize}
+\end{frame}
+
+% Closing slide
+% \subsection{Closure}
+% % {
+% % \setbeamertemplate{footline}{}
+% % \begin{frame}[noframenumbering]
+% %  \frametitle{\fontspec{Purisa}\textbf{Thank You!}}
+% %  \centering
+% %  \titlepage
+% % \end{frame}
+% % }
+% \begin{frame}
+%   % \centering
+%   \Huge
+%   \alert{Can managed programming languages run on future
+%   many-core architectures?}
+%   % \vspace{-2em}
+%   \vfill
+%   \begin{flushright}
+%     \fontspec{Purisa}\structure{Thank You!}
+%   \end{flushright}
+% \end{frame}
+
+%   BACKUP SLIDES
+
+\end{document}
