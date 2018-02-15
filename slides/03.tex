@@ -323,6 +323,29 @@ SmallCapsFeatures={Letters=SmallCaps},
 
 \section{Heap Allocation Algorithms}
 
+\begin{frame}{Heap Allocation}
+  \centering
+  \tikzstyle{allocated} = [rectangle, thick, draw, fill=myyellow, anchor=west, minimum width=1cm, minimum height=1cm]
+  \tikzstyle{arrow} = [thick, ->]
+
+  \begin{tikzpicture}
+    \node[draw, minimum height=1cm, minimum width=10cm] (mem) {};
+    \node[allocated] (alloc1) at (mem.west) {};
+    \node[draw, above=of alloc1.east] (free) {Free};
+    \draw[arrow, visible on=<1>] (free) to (alloc1.north east);
+    \node[allocated, right=0cm of alloc1, minimum width=2cm, visible on=<2-5>] (alloc2) {};
+    \draw[arrow, visible on=<2>] (free) to[bend left=15] (alloc2.north east);
+    \node[allocated, right=0cm of alloc2, minimum width=1.5cm, visible on=<3->] (alloc3) {};
+    \draw[arrow, visible on=<3>] (free) to[bend left=15] (alloc3.north east);
+    \node[allocated, right=0cm of alloc3, minimum width=1.25cm, visible on=<4-5>] (alloc4) {};
+    \draw[arrow, visible on=<4>] (free) to[bend left=15] (alloc4.north east);
+    \node[allocated, right=0cm of alloc4, minimum width=2.2cm, visible on=<5->] (alloc5) {};
+    \draw[arrow, visible on=<5->] (free) to[bend left=15] (alloc5.north east);
+    \node[visible on=<6>] at (alloc2.base) {\textbf{?}};
+    \node[visible on=<6>] at (alloc4.base) {\textbf{?}};
+  \end{tikzpicture}
+\end{frame}
+
 \begin{frame}{Heap Allocation: Free-list variations }
   \begin{itemize}  \setlength{\itemsep}{\fill}
   \item \alert{First-Fit}:
@@ -451,6 +474,21 @@ SmallCapsFeatures={Letters=SmallCaps},
   \item Fragmentation is the phenomenon of \alert{not being able to use parts of memory} because of inefficient management
   \item A \alert{heavily fragmented} system may have \alert{plenty of free memory}, but chopped in small blocks that \alert{don't fit} a new request
   \end{itemize}
+
+  \centering
+  \tikzstyle{allocated} = [rectangle, thick, fill=myyellow, minimum width=1cm, minimum height=1cm]
+
+  \begin{tikzpicture}
+    \node[allocated] (alloc1) {};
+    \node[allocated, right=.7cm of alloc1, minimum width=2cm] (alloc2) {};
+    \node[allocated, right=.6cm of alloc2, minimum width=1.5cm] (alloc3) {};
+    \node[allocated, right=.8cm of alloc3, minimum width=1.25cm] (alloc4) {};
+    \node[allocated, right=.5cm of alloc4, minimum width=2.2cm] (alloc5) {};
+    \node[allocated, right=.6cm of alloc5, minimum width=1.5cm] (alloc6) {};
+
+    \node[fit=(alloc1)(alloc6), draw, inner sep=0mm] {};
+  \end{tikzpicture}
+
 \end{frame}
 
 \begin{frame}{Fragmentation Categorization}
@@ -576,7 +614,54 @@ public static void main(String args[]) {
   \end{itemize}
 \end{frame}
 
-% todo draw example for reachability
+\begin{frame}{Reachability}
+  \centering
+
+  \tikzstyle{object} = [draw, rectangle, thick, minimum width=1cm, minimum height=1cm]
+  \tikzstyle{arrow} = [->, thick]
+  \tikzstyle{arrowc} = [arrow, color=myyellow]
+
+  \begin{tikzpicture}
+    \node[object, color=myyellow, minimum width=1.5cm, minimum height=4cm] (roots) at (-2,-1) {roots};
+
+    \node[object] (a) at (0,0) {A};
+    \node[object, visible on=<-5>] (b) at (2,.5) {B};
+    \node[object, visible on=<-5>] (c) at (4,0) {C};
+    \node[object] (d) at (6,0) {D};
+    \node[object] (e) at (8,0) {E};
+    \node[object] (f) at (1,-2) {F};
+    \node[object] (g) at (3,-3) {G};
+    \node[object] (h) at (5,-2) {H};
+
+    \draw[arrow] (a) to (f);
+    \draw[arrow] (a) to (h);
+    \draw[arrow] (b) to (c);
+    \draw[arrow] (c) to (h);
+    \draw[arrow] (h) to (d);
+    \draw[arrow] (h) to (g);
+    \draw[arrow] (d) to (e);
+    \draw[arrow] (e) to (h);
+
+    \draw[arrowc, visible on=<2->] (roots) to (a);
+    \draw[arrowc, visible on=<2->] (roots) to (f);
+    \draw[arrowc, visible on=<3->] (a) to (f);
+    \draw[arrowc, visible on=<3->] (a) to (h);
+    \draw[arrowc, visible on=<4->] (h) to (d);
+    \draw[arrowc, visible on=<4->] (h) to (g);
+    \draw[arrowc, visible on=<5->] (d) to (e);
+    \draw[arrowc, visible on=<6->] (e) to (h);
+
+    \node[object, draw=myyellow, visible on=<2->] at (0,0) {A};
+    \node[object, draw=myyellow, visible on=<2->] at (1,-2) {F};
+    \node[object, draw=myyellow, visible on=<3->] at (5,-2) {H};
+    \node[object, draw=myyellow, visible on=<4->] at (6,0) {D};
+    \node[object, draw=myyellow, visible on=<4->] at (3,-3) {G};
+    \node[object, draw=myyellow, visible on=<5->] at (8,0) {E};
+    \node[object, dashed, visible on=<6>] at (2,.5) {B};
+    \node[object, dashed, visible on=<6>] at (4,0) {C};
+
+  \end{tikzpicture}
+\end{frame}
 
 \subsection{Reference Counting}
 
