@@ -773,8 +773,9 @@ public static void main(String args[]) {
 \begin{frame}{Copying Collection}
   Pros \tik
   \begin{itemize}  \setlength{\itemsep}{\fill}
-  \item \alert{Increase locality?}
   \item \alert{Bump} allocation
+  \item Traverse \alert{only live} objects
+  \item \alert{Increase locality?}
   \end{itemize}
 
   \pause
