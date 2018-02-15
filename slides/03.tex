@@ -138,7 +138,7 @@ SmallCapsFeatures={Letters=SmallCaps},
 \usepackage{listings}
 \lstset{
   language=c,
-  basicstyle=\scriptsize\ttfamily,
+  basicstyle=\small\ttfamily,
 %  columns=flexible,
   % numbers=left,
   % numberstyle=\ttfamily\tiny,
@@ -348,6 +348,104 @@ SmallCapsFeatures={Letters=SmallCaps},
   \end{itemize}
 \end{frame}
 
+\begin{frame}{First-Fit}
+  \centering
+
+  \tikzstyle{freeblock} = [draw, rectangle, anchor=north, thick, minimum width=2cm, minimum height=1cm]
+  \tikzstyle{arrow} = [->, thick]
+  \tikzstyle{arrowc} = [arrow, color=myyellow, dashed]
+
+  \begin{tikzpicture}
+    \node[freeblock, color=myyellow] (head) at (0,0) {Head};
+    \node[freeblock, minimum height=2.5cm] (free1) at (2.5,0) {};
+    \node[freeblock, minimum height=6cm, visible on=<-3>] (free2) at (5,0) {};
+    \node[freeblock, minimum height=3cm, visible on=<4>] (free2b) at (5,0) {};
+    \node[freeblock, minimum height=4cm] (free3) at (7.5,0) {};
+    \node[freeblock, minimum height=5cm] (free4) at (10,0) {};
+
+    \draw[arrowc] (head) -- (1.5,-0.5);
+    \draw[arrow] (3.5,-0.5) -- (4,-0.5);
+    \draw[arrow] (6,-0.5) -- (6.5,-0.5);
+    \draw[arrow] (8.5,-0.5) -- (9,-0.5);
+
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<1>] (request) at (0,-3.25) {Request};
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<2>] (request) at (2.5,0) {Request};
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<3>] (request) at (5,0) {Request};
+    \node[freeblock, minimum height=3cm, dashed, visible on=<4>] (request) at (5,-3.25) {Request};
+
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Best-Fit}
+  \centering
+
+  \tikzstyle{freeblock} = [draw, rectangle, anchor=north, thick, minimum width=2cm, minimum height=1cm]
+  \tikzstyle{arrow} = [->, thick]
+  \tikzstyle{arrowc} = [arrow, color=myyellow, dashed]
+
+  \begin{tikzpicture}
+    \node[freeblock, color=myyellow] (head) at (0,0) {Head};
+    \node[freeblock, minimum height=2.5cm] (free1) at (2.5,0) {};
+    \node[freeblock, minimum height=6cm] (free2) at (5,0) {};
+    \node[freeblock, minimum height=4cm, visible on=<-6>] (free3) at (7.5,0) {};
+    \node[freeblock, minimum height=1cm, visible on=<7>] (free3b) at (7.5,0) {};
+    \node[freeblock, minimum height=5cm] (free4) at (10,0) {};
+
+    \draw[arrowc] (head) -- (1.5,-0.5);
+    \draw[arrow] (3.5,-0.5) -- (4,-0.5);
+    \draw[arrow] (6,-0.5) -- (6.5,-0.5);
+    \draw[arrow] (8.5,-0.5) -- (9,-0.5);
+
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<1>] (request) at (0,-3.25) {Request};
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<2>] (request) at (2.5,0) {Request};
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<3>] (request) at (5,0) {Request};
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<{4,6}>] (request) at (7.5,0) {Request};
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<{5}>] (request) at (10,0) {Request};
+
+    \node[freeblock, minimum height=3cm, dashed, visible on=<7>] (request) at (7.5,-1.25) {Request};
+
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Next-Fit}
+  \centering
+
+  \tikzstyle{freeblock} = [draw, rectangle, anchor=north, thick, minimum width=2cm, minimum height=1cm]
+  \tikzstyle{arrow} = [->, thick]
+  \tikzstyle{arrowc} = [arrow, color=myyellow, dashed]
+
+  \begin{tikzpicture}
+    \node[freeblock, color=myyellow] (head) at (0,0) {Head};
+    \node[freeblock, minimum height=2.5cm] (free1) at (2.5,0) {};
+    \node[freeblock, minimum height=6cm, visible on=<-3>] (free2) at (5,0) {};
+    \node[freeblock, minimum height=3cm, visible on=<4->] (free2b) at (5,0) {};
+    \node[freeblock, minimum height=4cm] (free3) at (7.5,0) {};
+    \node[freeblock, minimum height=5cm, visible on=<-8>] (free4) at (10,0) {};
+    \node[freeblock, minimum height=.5cm, visible on=<9>] (free4b) at (10,0) {};
+
+    \draw[arrowc, visible on=<-2>] (head) -- (1.5,-0.5);
+    \draw[arrowc, visible on=<3-6>] (head.north east) to[bend left] (free2.north west);
+    \draw[arrowc, visible on=<7>] (head.north east) to[bend left=10] (free3.north west);
+    \draw[arrowc, visible on=<8->] (head.north east) to[bend left=10] (free4.north west);
+    \draw[arrow] (3.5,-0.5) -- (4,-0.5);
+    \draw[arrow] (6,-0.5) -- (6.5,-0.5);
+    \draw[arrow] (8.5,-0.5) -- (9,-0.5);
+    \draw[arrow] (free4.north west) to[bend right=15] (free1.north east);
+
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<1>] at (0,-3.25) {Request};
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<2>] at (2.5,0) {Request};
+    \node[freeblock, minimum height=3cm, color=YellowGreen, visible on=<3>] at (5,0) {Request};
+    \node[freeblock, minimum height=3cm, dashed, visible on=<4>] at (5,-3.25) {Request};
+
+    \node[freeblock, minimum height=4.5cm, color=YellowGreen, visible on=<5>] at (0,-1.75) {Request};
+    \node[freeblock, minimum height=4.5cm, color=YellowGreen, visible on=<6>] at (5,0) {Request};
+    \node[freeblock, minimum height=4.5cm, color=YellowGreen, visible on=<7>] at (7.5,0) {Request};
+    \node[freeblock, minimum height=4.5cm, color=YellowGreen, visible on=<8>] at (10,0) {Request};
+    \node[freeblock, minimum height=4.5cm, dashed, visible on=<9>] at (10,-.75) {Request};
+
+  \end{tikzpicture}
+\end{frame}
+
 \begin{frame}{Fragmentation}
   \begin{itemize}  \setlength{\itemsep}{\fill}
   \item Fragmentation is the phenomenon of \alert{not being able to use parts of memory} because of inefficient management
@@ -381,6 +479,52 @@ SmallCapsFeatures={Letters=SmallCaps},
   \end{enumerate}
 \end{frame}
 
+\begin{frame}{Single-size Free-lists}
+  \centering
+
+  \tikzstyle{freeblock} = [draw, rectangle, anchor=north, thick, minimum width=2cm, minimum height=1cm]
+  \tikzstyle{arrow} = [->, thick]
+  \tikzstyle{arrowc} = [arrow, color=myyellow, dashed]
+
+  \begin{tikzpicture}
+    \node[freeblock, color=myyellow] (head1) at (0,0) {Head1};
+    \node[freeblock, minimum height=1cm] at (2.5,0) {};
+    \node[freeblock, minimum height=1cm] at (5,0) {};
+    \node[freeblock, minimum height=1cm] at (7.5,0) {};
+    \node[freeblock, minimum height=1cm] at (10,0) {};
+
+    \draw[arrowc] (1,-0.5) -- (1.5,-0.5);
+    \draw[arrow] (3.5,-0.5) -- (4,-0.5);
+    \draw[arrow] (6,-0.5) -- (6.5,-0.5);
+    \draw[arrow] (8.5,-0.5) -- (9,-0.5);
+
+    \node[freeblock, color=myyellow] (head2) at (0,-1.5) {Head2};
+    \node[freeblock, minimum height=1.5cm] at (2.5,-1.5) {};
+    \node[freeblock, minimum height=1.5cm] at (5,-1.5) {};
+    \node[freeblock, minimum height=1.5cm] at (7.5,-1.5) {};
+    \node[freeblock, minimum height=1.5cm] at (10,-1.5) {};
+
+    \draw[arrowc] (1,-2) -- (1.5,-2);
+    \draw[arrow] (3.5,-2) -- (4,-2);
+    \draw[arrow] (6,-2) -- (6.5,-2);
+    \draw[arrow] (8.5,-2) -- (9,-2);
+
+    \node[freeblock, color=myyellow] (head3) at (0,-3.5) {Head3};
+    \node[freeblock, minimum height=2cm] at (2.5,-3.5) {};
+    \node[freeblock, minimum height=2cm] at (5,-3.5) {};
+    \node[freeblock, minimum height=2cm] at (7.5,-3.5) {};
+    \node[freeblock, minimum height=2cm] at (10,-3.5) {};
+
+    \draw[arrowc] (1,-4) -- (1.5,-4);
+    \draw[arrow] (3.5,-4) -- (4,-4);
+    \draw[arrow] (6,-4) -- (6.5,-4);
+    \draw[arrow] (8.5,-4) -- (9,-4);
+
+    \node[fit=(head1)(head3), draw=myyellow, dashed] (heads) {};
+    \node[left=3mm of heads.north west, rotate=90, text=myyellow] {Heads};
+  \end{tikzpicture}
+\end{frame}
+
 \begin{frame}
   \centering
   What about \alert{multi-threaded} applications???
@@ -401,7 +545,8 @@ SmallCapsFeatures={Letters=SmallCaps},
 \begin{lstlisting}
 public static void main(String args[]) {
   List<String> lines=
-    Files.readAllLines(Paths.get(args[0]), Charset.defaultCharset());
+    Files.readAllLines(Paths.get(args[0]),
+                       Charset.defaultCharset());
   int nLines= lines.size();
   // reclaim lines??
   System.out.println(nLines);
