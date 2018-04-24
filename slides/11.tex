@@ -163,7 +163,7 @@ SmallCapsFeatures={Letters=SmallCaps},
 \usepackage{booktabs} % bottomrule
 \usepackage{multirow}
 
-% Print table of contects at the beggining of each section
+% Print table of contects at the beginning of each section
 % \AtBeginSection[]{\begin{frame}\frametitle{Table of Contents}\tableofcontents[currentsection,currentsubsection]\end{frame}}
 % \AtBeginSubsection[]{\begin{frame}\frametitle{Table of Contents}\tableofcontents[currentsection,currentsubsection]\end{frame}}
 
@@ -185,7 +185,7 @@ SmallCapsFeatures={Letters=SmallCaps},
 %%%%%%%%%%%%%%%
 
 \title{Managed Runtime Systems}
-\subtitle{Lecture 10: Java Concurrency}
+\subtitle{Lecture 11: Advanced Garbage Collection}
 \author[\url{https://foivos.zakkak.net}]{Foivos Zakkak}
 % \institute[]{ManLang'17}
 \date{\url{https://foivos.zakkak.net}}
@@ -217,235 +217,200 @@ SmallCapsFeatures={Letters=SmallCaps},
 %     \tableofcontents
 % \end{frame}
 
-\section{Introduction}
+\section{GC algorithms' goals}
 
-\begin{frame}{Java Concurrency}
-  Built-in
+\begin{frame}{GC algorithms' goals}
+  Overall application throughput
   \vfill
-  Through standard libraries
+  Short pause times
   \vfill
-  Through third party libraries
+  Space:
+  \begin{enumerate}
+  \item Reclamation accuracy
+  \item Space overhead of the algorithm
+  \end{enumerate}
+  \vfill
+  Implementation difficulties
 \end{frame}
 
-\section{Built-in Java Concurrency}
+\section{Parallel GC}
 
-\begin{frame}{Built-in Java Concurrency}
-  Synchronized methods:\\
-  \code{public synchronized void foo() {...}}
-  \vfill
-  Synchronized block:\\
-  \code{synchronized(barObject) {...}}
-  \vfill
-  Volatile variables:\\
-  \code{volatile int volatileInteger;}
-  \vfill
-  Java Threads:\\
-  \code{myThread.start(); myThread.join(); ...}
-  \vfill
-  Object wait/notify:\\
-  \code{myObject.wait(); myObject.notify(); ...}
+\begin{frame}{Parallel GC}
+  \centering
+  \includegraphics[page=65,trim=0cm 7.5cm 0cm 9cm,height=.75\textheight]{gchandbookfigures}\\
+  \src{\url{http://gchandbook.org/figures.html}}
 \end{frame}
 
-\begin{frame}{Java Threads}
-  Can be started only once
+\begin{frame}{Things to Consider}
+  Is there enough work?
   \vfill
-  Can have different priorities 1-10, default is 5
+  Load balancing
   \vfill
-  See also: \code{Thread.MIN\_PRIORITY}, \code{Thread.NORMAL\_PRIORITY}, \code{Thread.MAX\_PRIORITY}
+  Synchronization
   \vfill
-  However, priorities are not guaranteed to be taken into account
+  Termination of GC cycle
 \end{frame}
 
-\begin{frame}{Java Threads}
-  \code{Thread.sleep(duration)} Stop for \code{duration} milliseconds
-  \vfill
-  \code{Thread.yield()} Let the JVM know that we are willing to stop running to allow other threads to run
-  \vfill
-  \code{myThread.join()} Pause current thread till the completion of myThread (it can also be given a timeout as argument)
+\begin{frame}{Parallel GC Taxonomy}
+  \begin{columns}
+    \begin{column}{.5\linewidth}
+      \begin{alertblock}{Processor-centric \color{myyellow}y}
+        \begin{itemize}
+        \item Work-stealing
+        \item No locality considerations
+        \item Various sizes of workloads
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+    \begin{column}{.5\linewidth}
+      \begin{alertblock}{Memory-centric}
+        \begin{itemize}
+        \item Work on contiguous memory
+        \item Favor local data
+        \item Fixed size workloads
+        \end{itemize}
+      \end{alertblock}
+    \end{column}
+  \end{columns}
 \end{frame}
 
-\begin{frame}{Java Objects}
-  \code{myObject.wait()} Pause execution till notified (it can also be given a timeout as argument). Wait implicitly releases any locks owned by current thread and re-acquires them on notification.
-  \vfill
-  \code{myObject.notify()} Notify one of the waiting threads to resume execution
-  \vfill
-  \code{myObject.notifyAll()} Notify all the waiting threads
-\end{frame}
-
-\section{Standard Libraries}
-
-\begin{frame}{Standard Libraries}
-  Vector and Hashtable are thread-safe
-  \vfill
-  \url{https://docs.oracle.com/javase/8/docs/api/java/util/Vector.html}
-  \url{https://docs.oracle.com/javase/8/docs/api/java/util/Hashtable.html}
-\end{frame}
-
-\begin{frame}{Standard Libraries}
-  Thread-safe Collections: \code{java.util.Collections.synchronized*}
-  \vfill
-  \url{https://docs.oracle.com/javase/8/docs/api/java/util/Collections.html}
-\end{frame}
-
-\begin{frame}[fragile]{Be Careful Though!}
-\begin{lstlisting}
-public Object getLast(Vector vector) {
-    int lastIndex = vector.size() - 1;
-    return vector.get(lastIndex);
-}
-
-public void deleteLast(Vector vector) {
-    int lastIndex = vector.size() - 1;
-    list.remove(lastIndex);
-}
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}[fragile]{Be Careful Though!}
-\begin{lstlisting}
-public Object getLast(Vector vector) {
-    synchronized (vector) {
-        int lastIndex = vector.size() - 1;
-        return vector.get(lastIndex);
-    }
-}
-
-public void deleteLast(Vector vector) {
-    synchronized (vector) {
-        int lastIndex = vector.size() - 1;
-        vector.remove(lastIndex);
-    }
-}
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}{Standard Libraries}
-  Atomic variables: \code{java.util.concurrent.atomic}
-  \vfill
-  \url{https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/atomic/package-summary.html}
-\end{frame}
-
-\begin{frame}{Standard Libraries}
-  More locks: \code{java.util.concurrent.locks}
-  \vfill
-  \url{https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/locks/package-summary.html}
-\end{frame}
-
-\begin{frame}{Standard Libraries}
-  Concurrent Collections: \code{java.util.concurrent}
-  \vfill
-  \url{https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/package-summary.html}
-\end{frame}
-
-\begin{frame}{Concurrent Collections}
-  \code{ConcurrentMap}: set with no duplicates
-  \vfill
-  \code{ConcurrentHashMap}: hash-based set with no duplicates
-  \vfill
-  \code{BlockingQueue}: producer-consumer
-  \vfill
-  \code{CopyOnWriteArrayList}: optimized synchronized list
-\end{frame}
-
-\begin{frame}{CountDownLatch}
-  Blocks threads that invoke \code{await()}
-  \vfill
-  Threads unblock when latch reaches zero through \code{countDown()}
-\end{frame}
-
-\begin{frame}{Semaphore}
-  A counting semaphore, allowing a fixed number of threads to proceed
-\end{frame}
-
-\begin{frame}{CyclicBarrier}
-  Blocks till a number of threads reach the barrier and then continues
-\end{frame}
-
-\begin{frame}{Phaser}
-  Like CyclicBarrier but the number of threads that need to reach the barrier can change over time
-\end{frame}
-
-\begin{frame}{Exchanger}
-  Block till another thread reaches the exchange point and exchange an object
-\end{frame}
-
-\begin{frame}{Executor Framework}
-  Create and manage tasks
-  \vfill
-  Various thread pools to schedule executors on
-\end{frame}
-
-\begin{frame}{Futures}
-  Tasks that return a value
-  \vfill
-  We can see if a \texttt{Future} is complete and get its value
-  \vfill
-  We can wait a \texttt{Future}
-  \vfill
-  We can cancel a \texttt{Future}
-\end{frame}
-
-\begin{frame}{More!!!}
-\url{https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/package-summary.html}
-\end{frame}
-
-\subsection{Memory Model}
-
-\begin{frame}{Memory Model 1/2}
-  \small
-
-  The methods of all classes in \texttt{java.util.concurrent} and its
-  subpackages extend these guarantees to higher-level
-  synchronization. In particular:
-
+\begin{frame}{Parallel Marking}
+  \alert{Atomically(?)} acquire object to process
   \begin{itemize}
-  \item Actions in a thread prior to placing an object into any
-    concurrent collection \alert{happen-before} actions subsequent to the access
-    or removal of that element from the collection in another thread
+  \item Non-atomic acquisition only affects performance on non-moving GCs
+  \end{itemize}
+  \vfill
+  Push new objects to \alert{local pool}
+  \begin{itemize}
+  \item Deques to the rescue?
+  \item Push to a global pool when local is full?
+  \end{itemize}
+  \vfill
+  \alert{Work-steal} when idle
+  \vfill
+  \alert{Split} large objects?
+\end{frame}
 
-  \item Actions in a thread prior to the submission of a Runnable to an
-    Executor \alert{happen-before} its execution begins. Similarly for
-    \texttt{Callable}s submitted to an \texttt{ExecutorService}
-
-  \item Actions taken by the asynchronous computation represented by a
-    \texttt{Future} \alert{happen-before} actions subsequent to the
-    retrieval of the result via \texttt{Future.get()} in another thread
+\begin{frame}{Parallel Copying}
+  \alert{Race} on the forwarding pointer (spinning)
+  \begin{itemize}
+  \item The first to \alert{atomically} set it wins
+  \item If location is not yet known write a special \alert{busy} value
+  \item Other threads \alert{spin} till the final forwarding pointer is written
+  \end{itemize}
+  \vfill
+  \alert{Race} on the forwarding pointer (speculative)
+  \begin{itemize}
+  \item Speculatively copy object
+  \item Try to \alert{atomically} set forwarding pointer
+  \item In case of failure retract copy
+  \item In case of immutable objects consider not retracting but replicating
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Memory Model 2/2}
-  \small
+\begin{frame}{Parallel Copying}
+  Memory locality through \alert{dominant-thread tracing}
+  \centering
+  \includegraphics[page=68,trim=4cm 9cm 4cm 10cm,height=.65\textheight]{gchandbookfigures}\\
+  \src{\url{http://gchandbook.org/figures.html}}
+\end{frame}
+
+\begin{frame}{Parallel Copying}
+  Breadth-first copying \alert{separates parents from children}
+  \vfill
+  Depth-first copying is expected to yield \alert{better locality}
   \begin{itemize}
-  \item Actions prior to "releasing" synchronizer methods such as
-    \texttt{Lock.unlock}, \texttt{Semaphore.release}, and
-    \texttt{CountDownLatch.countDown} \alert{happen-before} actions
-    subsequent to a successful "acquiring" method such as
-    \texttt{Lock.lock}, \texttt{Semaphore.acquire},
-    \texttt{Condition.await}, and \texttt{CountDownLatch.await} on the
-    same synchronizer object in another thread
-
-  \item For each pair of threads that successfully exchange objects via
-    an \texttt{Exchanger}, actions prior to the \texttt{exchange()} in
-    each thread \alert{happen-before} those subsequent to the
-    corresponding \texttt{exchange()} in another thread
-
-  \item Actions prior to calling \texttt{CyclicBarrier.await} and
-    \texttt{Phaser.awaitAdvance} (as well as its variants)
-    \alert{happen-before} actions performed by the barrier action, and
-    actions performed by the barrier action \alert{happen-before}
-    actions subsequent to a successful return from the corresponding
-    await in other threads
+  \item Requires an auxiliary stack
   \end{itemize}
 \end{frame}
 
-\section{Third Party Libraries}
+\begin{frame}{Parallel Sweeping}
+  \centering
+  Partition the heap in contiguous blocks
+\end{frame}
 
-\begin{frame}{Third Party Libraries}
-  Threadly (\url{https://threadly.github.io/threadly/})
+\begin{frame}{Parallel Compaction}
+  \centering
+  \includegraphics[page=72,trim=4cm 9.5cm 4cm 10.5cm,height=.7\textheight]{gchandbookfigures}\\
+  \src{\url{http://gchandbook.org/figures.html}}
+\end{frame}
+
+\begin{frame}{Parallel Compaction}
+  \centering
+  \includegraphics[page=73,trim=4cm 9.5cm 4cm 10.5cm,height=.7\textheight]{gchandbookfigures}\\
+  \src{\url{http://gchandbook.org/figures.html}}
+\end{frame}
+
+\section{Concurrent CG}
+
+\begin{frame}{Concurrent GC}
+  \centering
+  \includegraphics[page=75,trim=2cm 12cm 2cm 4.5cm,clip,height=.7\textheight]{gchandbookfigures}\\
+  \src{\url{http://gchandbook.org/figures.html}}
+\end{frame}
+
+\begin{frame}{Concurrent GC}
+  \centering
+  \includegraphics[page=75,trim=2cm 3cm 2cm 13.5cm,clip,height=.7\textheight]{gchandbookfigures}\\
+  \src{\url{http://gchandbook.org/figures.html}}
+\end{frame}
+
+\begin{frame}{Concurrent GC: Issue 1}
+  \centering
+  \includegraphics[page=8,trim=4cm 20.5cm 4cm 6cm,clip,width=\linewidth]{Vechev05Derivation}\\
+  \src{\url{https://link.springer.com/chapter/10.1007\%2F11531142_25}}
+\end{frame}
+
+\begin{frame}{Concurrent GC: Issue 2}
+  \centering
+  \includegraphics[page=9,trim=4cm 19.5cm 4cm 6cm,clip,width=\linewidth]{Vechev05Derivation}\\
+  \src{\url{https://link.springer.com/chapter/10.1007\%2F11531142_25}}
+\end{frame}
+
+\begin{frame}{Concurrent GC: Losing a live object}
+  \begin{enumerate}
+  \item The \alert{mutator} stores a pointer to a white object into a black object
+  \item \alert{All paths} from \alert{any gray objects} to that white object are destroyed
+  \end{enumerate}
   \vfill
-  JCTools (\url{https://github.com/JCTools/JCTools})
+  \pause
+  \begin{alertblock}{Solution}
+    Don't allow pointers from black objects to white objects?
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Concurrent GC: Mutator's Coloring}
+  \alert{White}: Mutator's roots has not been scanned
   \vfill
-  ...
+  \alert{Grey}: Mutator's roots need to be (re-)scanned
+  \vfill
+  \alert{Black}: Mutator's roots has been scanned
+\end{frame}
+
+\begin{frame}{Concurrent GC: Coloring of new Objects}
+  White and grey mutators can allocate white objects
+  \vfill
+  Black mutators can only allocate black objects
+\end{frame}
+
+\begin{frame}{Concurrent GC: Allow black-to-white pointers}
+  \alert{Barrier-based} approaches:
+  \begin{itemize}
+  \item Change color of white object at assignment
+  \item Change color of black object to grey
+  \item Scan object before assignment
+  \end{itemize}
+  \vfill
+  \alert{Snapshot-at-the-beginning}:
+  \begin{itemize}
+  \item Scan mutators at the beginning of the GC
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{For More!!!}
+  \centering
+  \includegraphics[trim=20cm 1cm 1cm 1cm,clip,height=.7\textheight]{gchandbookcover}\\
+  \url{https://gchandbook.org}
 \end{frame}
 
 % Closing slide
