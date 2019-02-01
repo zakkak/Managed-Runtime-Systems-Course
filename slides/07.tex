@@ -59,7 +59,6 @@ x11names]{beamer}
 
 \usefonttheme{professionalfonts}% use own font handling
 \usepackage{fontspec}
-\usepackage{xunicode}
 % \setmainfont{Comfortaa}
 % \setsansfont{Comfortaa}
 % \setsansfont{Liberation Sans}
@@ -283,8 +282,8 @@ SmallCapsFeatures={Letters=SmallCaps},
     \node (mycompilerc) [visible on=<2->, component, right= of javac] {MyCompiler.class};
     \draw[visible on=<2->, arrow] (oldvm.east) -- ++(.25,0) |- (mycompilerc.west);
 
-    \node (mycompiler2) [visible on=<3->, source, above=of mycompilerc] {MyCompiler.java};
-    \node (myvm) [visible on=<3->, source, above=0mm of mycompiler2] {MyVM.java};
+    \node (mycompiler2) [visible on=<3->, component, above=of mycompilerc] {MyCompiler.class};
+    \node (myvm) [visible on=<3->, component, above=0mm of mycompiler2] {MyVM.class};
     \node (oldvm2) [visible on=<3->, vm, right= of oldvm] {Old VM};
     \draw[visible on=<3->, arrow] (mycompiler2) -- (mycompilerc);
 
