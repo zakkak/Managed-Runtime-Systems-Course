@@ -413,18 +413,21 @@ SmallCapsFeatures={Letters=SmallCaps},
   \centering
   \begin{tikzpicture}
     \begin{axis}[
-      width=.9\columnwidth,
-      height=6cm,
-      domain=0:1000,
+      width=.95\columnwidth,
+      height=6.5cm,
+      domain=1:1000000,
       xlabel={Number of Executions},
       ylabel={Speedup},
+      xmode=log,
       ymode=log,
       axis y line=left,
       axis x line=bottom,
-      samples=500]
+      samples=2000]
       % use TeX as calculator:
       \addplot[color=myyellow, thick, dashed, samples=2] {1}
       node[below, xshift=-1cm] {$y = 1$};
+      \addplot[color=myyellow, dashed, samples=2] {5}
+      node[below, xshift=-1cm, yshift=.65cm] {$y = \rho$};
       \addplot[color=myyellow, thick, dashed, mark=none]
       coordinates { (125,0.02) (125, 10) } node[right, yshift=-2mm] {$x = 125$};
       \addplot[thick] { (5*x) / (x + 5*100) };
@@ -478,7 +481,7 @@ SmallCapsFeatures={Letters=SmallCaps},
     \item Standard placement of return addresses in the stack
     \item Access to saved registers (e.g. SP, FP) of suspended threads
     \end{itemize}
-  \item Depends on underlying, architecture, OS, ad calling convention
+  \item Depends on underlying, architecture, OS, and calling convention
   \item The OS can make this \alert{impossible}\\
     (e.g., by saving register state in kernel space).
   \end{itemize}
