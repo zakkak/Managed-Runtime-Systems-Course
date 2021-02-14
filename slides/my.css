@@ -1,0 +1,7 @@
+.reveal .slide-number {
+  background-color: transparent;
+}
+
+.reveal table td, .reveal table th {
+  border-bottom: none;
+}

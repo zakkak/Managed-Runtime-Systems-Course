@@ -1,0 +1,8 @@
+* License
+
+[[./figures/cc_white.svg]] [[./figures/attribution_icon_white.svg]]
+
+Except where otherwise noted, this presentation is licensed under the
+[[http://creativecommons.org/licenses/by/4.0/][Creative Commons Attribution 4.0 International License]]
+
+Third party marks and brands are the property of their respective holders

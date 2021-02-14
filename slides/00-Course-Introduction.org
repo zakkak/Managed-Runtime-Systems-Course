@@ -1,0 +1,101 @@
+#+TITLE: Managed Runtime Systems
+#+SUBTITLE: Course Introduction
+#+AUTHOR: Foivos Zakkak
+#+EMAIL: foivos@zakkak.net
+#+DATE: 2021-02-15
+#+INCLUDE: ./99-ox-reveal-setup.org
+#+INCLUDE: ./99-license.org
+
+* Introduction
+
+** Who am I?
+:PROPERTIES:
+:reveal_background: ./figures/redhat-back.jpg
+:data-background-opacity: 0.1
+:END:
++ My name is {{{alert(Foivos Zakkak)}}}
++ Software Engineer at [[https://www.redhat.com/][{{{alert(Red Hat)}}}]]
++ {{{alert(Visiting Instructor)}}} at [[https://www.csd.uoc.gr][CSD UoC]]
++ Working on {{{alert(Managed Runtime Systems)}}}
+
+** Who are You?
++ Name
++ CS Interests
++ Undergrad or Postgrad?
+
+** Contact
++ mailing-list: {{{alert(subscribe hy446-list)}}}
++ mail me at {{{alert(foivos@zakkak.net)}}} using subject prefix ~CS446~
+
+  e.g. ~CS446: The best project proposal ever!!!~
+
+** Hints!
++ OK to {{{alert(interrupt)}}} if you don't understand something
++ Please ask. {{{alert(There are no stupid questions)}}}!
++ The slides of the course are already uploaded at [[https://speakerdeck.com/zakkak]]
+
+* What Is This Course About?
+
+** Course Goal
+To introduce you to the world of managed runtime systems!
+
+** Execution of Managed Programming Languages
+#+ATTR_HTML: :border 0 :width 100% :frame none
+| Java       | Scala  | Ruby   |
+| JavaScript | Python | Groovy |
+|            | ...    |        |
+
+** Just in Time (JIT) Compilation
+  The process of generating machine code by\\
+  compiling code {{{alert(during execution)}}}
+
+** Automatic Memory Management
+  The {{{alert(art)}}} of cleaning up\\
+  other people's messes
+
+* What Is This Course NOT About
+
+** Exhaustive and Historical Coverage
+  We will mostly focus on the {{{alert(state-of-the-art)}}}
+
+** System Virtual Machines
+  We will only talk about {{{alert(language)}}} Virtual Machines
+  (a.k.a. Managed Runtime Systems)
+
+** Compilers
+  We will only talk about {{{alert(JIT)}}} compilation
+
+  We {{{alert(won't)}}} cover compiler theory exhaustively
+
+* The Course's Workload
+
+** The Course's Workload
+{{{alert(4 hours)}}} of lectures per week
+{{{alert(7)}}} reading assignments + summary
+{{{alert(1)}}} project + presentation
+
+** Project
+Work {{{alert(solo)}}} or in {{{alert(pairs of two)}}}
+
+Focus on {{{alert(JIT compilation)}}} or {{{alert(Garbage Collection)}}} on {{{alert(GraalVM)}}} or {{{alert(Maxine VM)}}}
+  (alternative interesting topics are also welcome)
+
+** Project proposals
+#+ATTR_HTML: :align left
+Should {{{alert(answer the following)}}}:
+  1. What do you find interesting in the project?
+  2. What do you expect to learn through this project implementation?
+  3. How are you going to demonstrate the success of your project?
+
+** Grading
+#+ATTR_HTML: :border 0 :width 100% :frame none
+| Class Paticipation  |  15% |
+| Reading Assignments |  35% |
+| Project             |  50% |
+|---------------------+------|
+| Total               | 100% |
+
+* Acknowledgments
+I would like to thank [[http://www.wolczko.com/CS294][Mario Wolczko]] for sharing his material of a relevant course presented in [[http://www.wolczko.com/CS294/][UC Berkeley]].
+
+Note that you can also watch Mario's lectures on [[https://www.youtube.com/channel/UCKvk5mv6aIDS9zNh-vI1s5Q/videos][YouTube]]
