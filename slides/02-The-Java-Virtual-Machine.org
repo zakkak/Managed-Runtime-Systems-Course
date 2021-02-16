@@ -1,0 +1,219 @@
+#+TITLE: Managed Runtime Systems
+#+SUBTITLE: The Java Virtual Machine
+#+AUTHOR: Foivos Zakkak
+#+EMAIL: foivos@zakkak.net
+#+DATE: 2021-02-15
+#+INCLUDE: ./99-ox-reveal-setup.org
+#+INCLUDE: ./99-license.org
+
+* The JVM architecture
+#+begin_src ditaa :file ./figures/jvm-architecture.svg :exports results :cmdline --svg
++--------+        +---------+
+|{d}cFC0 |        |{d}cFC0  |       +--------------+
+|        | javac  |         | java  |cB50          |
+| .java  +------->| .class  +------>| Class Loader |
+|        |        |         |       |              |
+|        |        |         |       +-------+------+
++--------+        +---------+               ^
+                                            |
+Data Locations                              V
+/-----------------------------------------------------------------------\
+| +-------------+-----------+------------+-------------+--------------+ |
+| | cDDD        | cDDD      | cDDD       | cDDD        | cDDD         | |
+| | Method Area | Heap Area | Stack Area | PC register | Native Stack | |
+| |             |           |            |             |              | |
+| +-------------+-----------+------------+-------------+--------------+ |
+\-----------------------------------------------------------------------/
+         ^                          ^
+         |                          |
+         V                          V
++------------------+   +--------------------------+   +------------------+
+| cB50             |   | cDDD                     |   | cDDD             |
+| Execution Engine |<->| Native Methods Interface |<->| Native Libraries |
+|                  |   |                          |   |                  |
++------------------+   +--------------------------+   +------------------+
+#+end_src
+
+#+RESULTS:
+[[file:./figures/jvm-architecture.svg]]
+
+** Class loading
+1. Verification
+2. Preparation of JVM internal data structures
+3. Resolution of references (might load other classes)
+4. Initialization
+
+#+BEGIN_NOTES
++ Loading: A class is obtained from a file and loaded to the JVM memory.
++ Verifying: Check whether or not the read class is configured as described in the Java Language Specification and JVM specifications. This is the most complicated test process of the class load processes, and takes the longest time. Most cases of the JVM TCK test cases are to test whether or not a verification error occurs by loading wrong classes.
++ Preparing: Prepare a data structure that assigns the memory required by classes and indicates the fields, methods, and interfaces defined in the class.
++ Resolving: Change all symbolic references in the constant pool of the class to direct references.
++ Initializing: Initialize the class variables to proper values. Execute the static initializers and initialize the static fields to the configured values.
+#+END_NOTES
+
+** Java Class file
+
+#+ATTR_REVEAL: :code_attribs data-line-numbers="|6,8-9,11"
+#+begin_src c
+ClassFile {
+  u4             magic;
+  u2             minor_version;
+  u2             major_version;
+  u2             constant_pool_count;
+  cp_info        constant_pool[constant_pool_count-1];
+  u2             access_flags;
+  u2             this_class;
+  u2             super_class;
+  u2             interfaces_count;
+  u2             interfaces[interfaces_count];
+  u2             fields_count;
+  field_info     fields[fields_count];
+  u2             methods_count;
+  method_info    methods[methods_count];
+  u2             attributes_count;
+  attribute_info attributes[attributes_count];
+}
+#+end_src
+
+** Field Info
+
+#+begin_src c
+field_info {
+  u2 access_flags; // public, private, protected, static, final,
+                   // volatile, transient, synthetic, enum
+  u2 name_index;
+  u2 descriptor_index;
+  u2 attributes_count;
+  attribute_info attributes[attributes_count]; // e.g., Deprecated
+}
+#+end_src
+
+** Java fields
++ Reference (Size is implementation-dependent)
++ Primitive
+  + 8, 16, 32, or 64-bit Integer (~byte~, ~short~, ~int~, ~long~, ~boolean~, ~char~)
+  + 32 or 64-bit IEEE 754 floating-point (~float~, ~double~)
+
+** Field Descriptors
+#+ATTR_HTML: :border 0 :width 100% :frame none :style font-size:70%
+| Abbreviation  | Type      | Example                                |
+|---------------+-----------+----------------------------------------|
+| B             | byte      |                                        |
+| C             | char      |                                        |
+| D             | double    |                                        |
+| F             | float     |                                        |
+| I             | int       |                                        |
+| J             | long      |                                        |
+| L<ClassName>; | reference | ~Ljava/lang/String;~                   |
+| S             | short     |                                        |
+| Z             | boolean   |                                        |
+| [             | array     | ~[I~   ~[[[D~    ~[Ljava/lang/Object;~ |
+
+** Method Info
+#+begin_src c
+method_info {
+  u2 access_flags; // public, private, native, var args, synthetic ...
+  u2 name_index;
+  u2 descriptor_index;
+  u2 attributes_count;
+  attribute_info attributes[attributes_count]; // e.g., Code, Exceptions
+}
+#+end_src
+
+Method Descriptors:
+#+begin_example
+  void foo(int a, Object o) => (ILjava/lang/Object;)V
+  String bar(int[][] i)     => ([[I)Ljava/lang/String;
+#+end_example
+
+** Code attribute
+#+begin_src c
+Code_attribute {
+  u2 attribute_name_index;
+  u4 attribute_length;
+  u2 max_stack;
+  u2 max_locals;
+  u4 code_length;
+  u1 code[code_length]; // The actual bytecode
+  u2 exception_table_length;
+  { u2 start_pc; // if catch_type is thrown between start_pc and end_pc,
+    u2 end_pc;   // execute handler at handler_pc
+    u2 handler_pc;
+    u2 catch_type;
+  } exception_table[exception_table_length];
+  u2 attributes_count;
+  attribute_info attributes[attributes_count]; // line numbers, stack maps,...
+}
+#+end_src
+
+* Runtime
+
+** Java Stack vs Native Stack
+
+#+begin_src ditaa :file ./figures/java-native-stack.svg :exports results :cmdline --svg -E -T -s 1.5
+                      /------------------\
+                      |cFC0              |
+                      |      Frame       |
++-------------+       |                  |
+|             |       |        ^         |
+| Java Stack  |       |        |         |
+|             |       |        |         |
+|      ^      |       + ---------------- +
+|      |      |       |  operand stack 2 |
+|      |      |       + ---------------- +
+| +---------+ |       |  operand stack 1 |
+| |         | |       + ---------------- +
+| | frame 2 | |       |  operand stack 0 |
+| |         | |       + ---------------- +
+| +---------+ |       |local variable n  |
+| |cFC0     | |       + ---------------- +
+| | frame 1 | |       |        .         |
+| |         | |       |        .         |
+| +---------+ |       |        .         |
+| |         | |       + ---------------- +
+| | frame 0 | |       |local variable 1  |
+| |         | |       + ---------------- +
++-+---------+-+       |local variable 0  |
+                      + ---------------- +
+                      |  return address  |
+                      \------------------/
+#+end_src
+
+#+RESULTS:
+[[file:./figures/java-native-stack.svg]]
+
+** Java Threads
++ A Program Counter
+  - Class
+  - Method
+  - Bytecode-offset or native code pointer
++ A Java Stack
++ Native stack
+
+** Java Objects and Arrays
+
+#+begin_src ditaa :file ./figures/object-array-layout.svg :exports results :cmdline --svg -E -T -s 1.5
++---------+         +-----------+
+| cBLU    |         | cBLU      |
+|  header |         |   header  |
+|         |         |           |
++---------+         +-----------+
+| field 0 |         |  length   |
++---------+         +-----------+
+| field 1 |         | element 0 |
++---------+         +-----------+
+|    .    |         | element 1 |
+|    .    |         +-----------+
+|    .    |         |     .     |
++---------+         |     .     |
+| field n |         |     .     |
++---------+         +-----------+
+                    | element n |
+                    +-----------+
+#+end_src
+
+#+RESULTS:
+[[file:./figures/object-array-layout.svg]]
+
+** More
+  [[https://docs.oracle.com/javase/specs/jvms/se11/html/jvms-4.html][The Java Virtual Machine Specification, Java SE 11 Edition, Chapter 4]]
