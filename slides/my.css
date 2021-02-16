@@ -11,3 +11,11 @@
 .reveal code {
   font-size: 70%;
 }
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides b {
+  color: #268bd2;
+}

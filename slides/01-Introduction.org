@@ -75,33 +75,33 @@ A {{{alert(machine)}}} that executes managed programs
 
 ** How Does it Work?
 #+ATTR_HTML: :border 0 :width 100% :frame none
-| {{{alert(Interpreters)}}}       | Parse and execute instructions         |
-| {{{alert(JIT compilers)}}}      | On the fly compilation to machine code |
-| {{{alert(Garbage Collectors)}}} | Automatic memory management            |
-| {{{alert(Memory Models)}}}      | Define expected behavior               |
+| *Interpreters*       | Parse and execute instructions         |
+| *JIT compilers*      | On the fly compilation to machine code |
+| *Garbage Collectors* | Automatic memory management            |
+| *Memory Models*      | Define expected behavior               |
 
 ** The most popular MRS/VMs
 #+ATTR_HTML: :border 0 :width 100% :frame none
-| {{{alert(Java)}}}                  | HotSpot (Oracle and OpenJDK)        |
-|                                    | OpenJ9 (IBM and Eclipse)            |
-|                                    | Android Runtime (Google)            |
-|                                    |                                     |
-| {{{alert(JS)}}}                    | V8 (Google)                         |
-|                                    | SpiderMonkey (Mozilla)              |
-|                                    | JavaScriptCore a.k.a. Nitro (Apple) |
-|                                    | \xcancel{Chakra (Microsoft)}        |
-|                                    |                                     |
-| {{{alert(.Net (C\#, J\#, etc.))}}} | Common Language Runtime (Microsoft) |
+| *Java*                  | HotSpot (Oracle and OpenJDK)        |
+|                         | OpenJ9 (IBM and Eclipse)            |
+|                         | Android Runtime (Google)            |
+|                         |                                     |
+| *JS*                    | V8 (Google)                         |
+|                         | SpiderMonkey (Mozilla)              |
+|                         | JavaScriptCore a.k.a. Nitro (Apple) |
+|                         | \xcancel{Chakra (Microsoft)}        |
+|                         |                                     |
+| *.Net (C\#, J\#, etc.)* | Common Language Runtime (Microsoft) |
 
 ** Different Goals Different Challenges
 #+ATTR_HTML: :border 0 :width 100% :frame none
-| {{{alert(Java \& .Net)}}} | Server Applications                  |
-|                           | Desktop Applications                 |
-|                           | Mobile Applications                  |
-|                           |                                      |
-| {{{alert(JS)}}}           | Web Backend (e.g. nodeJS)            |
-|                           | Web Frontend                         |
-|                           | Desktop Applications (e.g. Electron) |
+| *Java \& .Net* | Server Applications                  |
+|                | Desktop Applications                 |
+|                | Mobile Applications                  |
+|                |                                      |
+| *JS*           | Web Backend (e.g. nodeJS)            |
+|                | Web Frontend                         |
+|                | Desktop Applications (e.g. Electron) |
 
 ** Server Applications
 + High throughput
