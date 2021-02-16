@@ -10,7 +10,7 @@
 
 ** What is a Managed Runtime System?
 A {{{alert(machine)}}} that executes managed programs
-#+begin_src ditaa :file layers.svg :exports results :cmdline -T -E --svg -s 2
+#+begin_src ditaa :file ./figures/layers.svg :exports results :cmdline -T -E --svg -s 2
 +-------------------------------------------+
 |                                           |
 |        Program (Java, Python, etc.)       |
@@ -30,7 +30,7 @@ A {{{alert(machine)}}} that executes managed programs
 +--------+-----------+------------+---------+
 #+end_src
 #+RESULTS:
-[[file:layers.svg]]
+[[file:./figures/layers.svg]]
 
 ** Other names for Managed Runtime Systems
 + Managed Runtime Environments
