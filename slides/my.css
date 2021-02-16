@@ -1,7 +1,13 @@
 .reveal .slide-number {
   background-color: transparent;
+  right: 3em;
+  bottom: 4em;
 }
 
 .reveal table td, .reveal table th {
   border-bottom: none;
+}
+
+.reveal code {
+  font-size: 70%;
 }
