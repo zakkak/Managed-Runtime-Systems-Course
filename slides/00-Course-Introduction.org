@@ -37,7 +37,8 @@
 * What Is This Course About?
 
 ** Course Goal
-To introduce you to the world of managed runtime systems!
+To introduce you to the world of
+Managed Runtime Systems!
 
 ** Execution of Managed Programming Languages
 #+ATTR_HTML: :border 0 :width 100% :frame none
@@ -46,12 +47,12 @@ To introduce you to the world of managed runtime systems!
 |            | ...    |        |
 
 ** Just in Time (JIT) Compilation
-  The process of generating machine code by\\
-  compiling code {{{alert(during execution)}}}
+The process of generating machine code
+by compiling source or byte code
+{{{alert(during execution)}}}
 
 ** Automatic Memory Management
-  The {{{alert(art)}}} of cleaning up\\
-  other people's messes
+  The {{{alert(art)}}} of cleaning up other people's messes
 
 * What Is This Course NOT About
 
