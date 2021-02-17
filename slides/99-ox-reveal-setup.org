@@ -1,6 +1,6 @@
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
 #+REVEAL_TITLE_SLIDE: <h2>%t</h2><h3>%s</h3><br/><br/><!-- <h4>%a</h4> --><h5>%e</h5>
-#+REVEAL_EXTRA_OPTIONS: slideNumber:"c/t", navigationMode:"default", controls:true, controlsTutorial:false, controlsLayout:"bottom-right", hash:false, center:false, transitionSpeed:"fast"
+#+REVEAL_EXTRA_OPTIONS: slideNumber:"c/t", navigationMode:"default", controls:true, controlsTutorial:false, controlsLayout:"bottom-right", hash:false, center:true, transitionSpeed:"fast"
 #+REVEAL_EXTRA_CSS: my.css
 #+REVEAL_PLUGINS: (highlight notes search zoom)
 #+REVEAL_VERSION: 4
