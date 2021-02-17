@@ -1,4 +1,7 @@
 * License
+:PROPERTIES:
+:reveal_extra_attr: style="text-align:center"
+:END:
 
 [[./figures/cc_white.svg]] [[./figures/attribution_icon_white.svg]]
 
