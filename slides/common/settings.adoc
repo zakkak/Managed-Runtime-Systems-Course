@@ -1,0 +1,10 @@
+:author: Foivos Zakkak
+:email: foivos@zakkak.net
+:icons: font
+:source-highlighter: highlightjs
+:imagesdir: ./figures
+:customcss: ./common/style.css
+:revealjs_width: 1280
+:revealjs_height: 720 
+:revealjs_slideNumber: c/t
+:stem: latexmath

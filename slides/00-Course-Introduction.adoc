@@ -1,0 +1,133 @@
+include::common/theme.adoc[]
+= Managed Runtime Systems =
+
+include::common/settings.adoc[]
+include::common/license.adoc[]
+
+== Introduction ==
+
+=== Who am I? ===
+
+[.refs]
+--
+* [Background Image Copyright © Red Hat, Inc.]
+--
+
+* My name is [.red]#*Foivos Zakkak*#
+* Software Engineer at [.red]#*https://www.redhat.com/[Red Hat]*#
+* [.red]#*Visiting Instructor*# at https://www.csd.uoc.gr[CSD UoC]
+* Working on [.red]#*Managed Runtime Systems*#
+
+image::redhat-back.jpg[background, size=contain]
+
+
+=== Who are You? ===
+* Name
+* CS Interests
+* Undergrad or Postgrad?
+
+
+=== Contact ===
+* mailing-list: [.red]#*subscribe hy446-list*#
+* mail me at [.red]#*mailto:foivos@zakkak.net?subject=CS446:[foivos@zakkak.net]*# using subject prefix `CS446`, e.g.:
++
+[example]
+CS446: The best project proposal ever!!!
+
+[.notes]
+--
+* [ ] Update mailing list instructions
+--
+
+=== Hints! ===
+* OK to [.red]#*interrupt*# if you don't understand something
+* Please ask. [.red]#*There are no stupid questions*#!
+* The slides of the course are already uploaded at https://speakerdeck.com/zakkak[https://speakerdeck.com/zakkak]
+
+[.notes]
+--
+* [ ] Update slides link or upload new slides to speakerdeck
+--
+
+
+== What Is This Course About? ==
+
+=== Course Goal ===
+To introduce you to the world of +
+Managed Runtime Systems!
+
+
+=== Execution of Managed Programming Languages ===
+[width="80%", cols="3*^", frame=none, grid=none]
+|====
+| Java| Scala| Ruby
+| JavaScript| Python| Groovy
+| | ...|
+|====
+
+
+=== Just in Time (JIT) Compilation ===
+The process of generating machine code +
+by compiling source or byte code +
+*during execution*
+
+
+=== Automatic Memory Management ===
+The *art* of cleaning up other people's messes
+
+
+== What Is This Course NOT About ==
+
+=== Exhaustive and Historical Coverage ===
+We will mostly focus on the *state-of-the-art*
+
+
+=== System Virtual Machines ===
+We will only talk about *language* Virtual Machines +
+(a.k.a. Managed Runtime Systems)
+
+
+=== Compilers ===
+We will only talk about *JIT* compilation
+
+We *won't* cover compiler theory exhaustively
+
+
+== The Course's Workload ==
+
+=== The Course's Workload ===
+*4 hours* of lectures per week +
+*7* reading assignments + summary +
+*1* project + presentation
+
+
+=== Project ===
+Work [.red]#*solo*# or in [.red]#*pairs of two*#
+
+Focus on [.red]#*JIT compilation*# or [.red]#*Garbage Collection*# +
+(alternative interesting topics are also welcome)
+
+
+=== Project proposals ===
+Should *answer the following*:
+
+. What do you find interesting in the project?
+. What do you expect to learn through this project implementation?
+. How are you going to demonstrate the success of your project?
+
+
+=== Grading ===
+[width="80%", cols=">2h,1", frame=none, grid=none]
+|====
+| Class Participation| 15%
+| Reading Assignments| 35%
+| Project| 50%
+
+| Total h| 100%
+|====
+
+
+== Acknowledgments ==
+I would like to thank http://www.wolczko.com[Mario Wolczko] for sharing his material from a http://www.wolczko.com/CS294/[relevant course presented in UC Berkeley].
+
+Note that you can also watch Mario's lectures on https://www.youtube.com/channel/UCKvk5mv6aIDS9zNh-vI1s5Q/videos[YouTube]

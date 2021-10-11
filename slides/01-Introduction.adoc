@@ -1,0 +1,204 @@
+include::common/theme.adoc[]
+= Managed Runtime Systems =
+
+include::common/settings.adoc[]
+include::common/license.adoc[]
+
+== Introduction ==
+
+=== What is a Managed Runtime System? ===
+A [.red]#*machine*# that executes managed programs
+
+[ditaa, target=layers, format=svg, transparent=true, scale=2, separation=false]
+----
++-------------------------------------------+
+|                                           |
+|        Program (Java, Python, etc.)       |
+|                                           |
++-------------------------------------------+
+| cF50                                      |
+| Managed Runtime Systems / Virtual Machine |
+|                                           |
++-----------+-----------+-----------+-------+
+|           |           |           |       |
+| GNU/Linux |    OSX    |  Windows  |  ...  |
+|           |           |           |       |
++--------+--+--------+--+---------+-+-------+
+|        |           |            |         |
+|  x86   |   ARMv8   |   RISC-V   |   ...   |
+|        |           |            |         |
++--------+-----------+------------+---------+
+----
+
+=== Other names for Managed Runtime Systems ===
+* Managed Runtime Environments
+* Managed Runtimes
+* Virtual Machines
+* Process Virtual Machines
+* Language Virtual Machines
+
+
+== Why Managed Languages and Runtime Systems? ==
+
+=== Portability: "Write once, run everywhere" ===
+* Binary distribution
+* Consistent behavior
+* No need to recompile
+* No need to account for OS differences
+* No need to account for hardware differences
+
+
+=== Safety ===
+* Sandboxed environment
+* No pointer arithmetic
+* No arbitrary memory accesses
+* No arbitrary code flow
+
+
+=== Productivity ===
+* Built-in tools support (debugging, monitoring etc.)
+* No need to reinvent the wheel
+* No need to account for OS differences
+* No need to account for hardware differences/details
+
+
+=== Debugging ===
+* Built-in support
+* No need to recompile
+* On the fly instrumentation of production code
+* Observation of the system state
+
+
+=== Performance ===
+* Code profiling at run time
+* On the fly code optimizations
+
+[.columns.is-vcentered]
+=== Snapshots ===
+[.column]
+* Store state
+* Resume later
+* Resume elsewhere
+
+[.column]
+See https://github.com/chflood/jigawatts[Jigawatts]
+
+=== How Does it Work? ===
+[width="100%", cols=">2h,3" frame=none, grid=none]
+|====
+| Interpreters| Parse and execute instructions
+| JIT compilers| On the fly compilation to machine code
+| Garbage Collectors| Automatic memory management
+| Memory Models| Define expected behavior
+|====
+
+
+=== The most popular MRS/VMs ===
+[width="100%", cols=">2h,3" frame=none, grid=none]
+|====
+| Java| HotSpot +
+ OpenJ9 +
+ Android Runtime
+| |
+| JS| V8 +
+  SpiderMonkey +
+  JavaScriptCore a.k.a. Nitro +
+  Chakra
+| |
+| .Net (C#, J#, etc.)| Common Language Runtime
+|====
+
+[.notes]
+--
+Is Chakra still alive?
+--
+
+
+=== Different Goals Different Challenges ===
+[width="100%", cols=">1h,2" frame=none, grid=none]
+|====
+| Java & .Net|  Web Backend +
+//  Server Applications +
+ Desktop Applications +
+ Mobile Applications
+| |
+| JS| Web Backend (e.g. nodeJS) +
+  Web Frontend
+  Desktop Applications (e.g. Electron)
+|====
+
+
+=== Mobile vs Desktop Apps
+
+Aim for *responsiveness* and *fast start up times*
+
+.Constraints
+[cols="3h,2,3", options="header", frame=none]
+|====
+| | Mobile | Desktop
+
+| Memory | 2--8G | 4--32G
+| Power  | Battery | Plugged
+| Processing Power  | Low--Mid  | High
+| Up time | Minutes | Minutes--Hours
+|====
+
+=== Frontend vs Backend
+
+* Traditionally backend processes were running on dedicated servers or *fat VMs*.
+* Nowadays more and more backends are moving to short-lived *slim VMs* (containers)
+
+=== Frontend vs Backend: Constraints
+
+[cols="2h,2*3", options="header", frame=none]
+|====
+| | Fat VMs | Slim VMs
+
+| Memory | 4--64G | 1--2G
+| Processing Power  | High  | Low
+| Up time | Days--Months | Minutes--Hours
+|====
+
+[.columns]
+=== Managed Runtime Systems
+
+[.column]
+*Then:*
+
+
+
+[.column]
+*Now:*
+
+
+=== Different Goals Different Challenges ===
+[cols="h,4*", options="header", frame=none, stripes=even]
+|====
+| | Performance Orientation| Memory Usage | Energy Consumption | Startup Time
+
+| Desktop | Latency| Medium| Low| Fast
+| Mobile | Latency| Low| Low| Fast
+| Web Frontend| Latency| Low| Low| Fast
+| Web Backend| Throughput| High| $| --
+// | Server | Both| High| $| --
+|====
+
+
+== No VM to rule them all!!! ==
+Yet!?
+
+
+=== Key features of a successful VM ===
+* Fast
+* Energy Efficient
+* Secure
+* Modular
+* Built-in Concurrency Support
+
+
+=== Nice to have features ===
+* Maintainable
+* Polyglot!?
+* Fault tolerance
+* Support for accelerators/heterogeneous systems
+* Small memory footprint

@@ -1,0 +1,99 @@
+/* Licensed under CC-BY-SA
+ * Author: Benjamin Schmid
+ * Source: https://github.com/bentolor/java9to13/blob/master/docs/css/presentation.css
+ */
+
+/* ------------------------------------------------------ The refs section */
+DIV.refs {
+    background-color: rgba(255,255,255,0);
+    border-top: 1px solid rgba(0,0,0,.2);
+    padding: 2px 0 0 0;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 720;
+    text-align: right;
+  }
+  
+  DIV.refs P, DIV.refs P A {
+    color: rgb(201, 201, 201);
+    margin: 0;
+  }
+  
+  DIV.refs DIV.ulist {
+    margin: 0; 
+    padding: 0;
+    font-size: 1.3rem;
+    line-height: 0.9;
+  }
+  
+  DIV.refs DIV.ulist UL {
+    list-style-type: none;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  DIV.refs DIV.ulist UL LI {
+    width: 50%;
+    float: right;
+    text-align: center;
+  }
+  
+  /* hovering effects */
+  /* DIV.refs:hover {
+    background-color: #745d4860;
+    cursor: pointer;
+  }
+  DIV.refs:hover LI P {
+    color: black;
+  }
+  DIV.refs LI:hover P A {
+    text-decoration: underline;
+    color: blue;
+  } */
+
+ 
+.small p, .small li, p.small, div.small, span.small, .small code, .TABLE.small, .small TH {
+  font-size: 94% !important;
+}
+.x-small p, .x-small li, p.x-small, div.x-small, span.x-small, .x-small code, TABLE.x-small, .x-small TH {
+  font-size: 86% !important;
+}
+.reveal .x-small TH, .reveal .x-small TD, .x-small TD P {
+  padding: 0.1em 0.25em;
+  margin: 8px 0;
+}
+.xx-small p, .xx-small li, p.xx-small, div.xx-small, span.xx-small, .xx-small code, .xx-small TABLE, .xx-small TH {
+  font-size: 78% !important;
+}
+.small LI P {
+  margin: 12px 0;
+}
+.x-small LI P, .xx-small LI P {
+  margin: 6px 0;
+}
+.xx-small p {
+  margin: 0 !important;
+}
+
+
+.red {
+  color: #a23;
+}
+
+/* No blue links */
+.reveal A {
+  color: gainsboro;
+  text-decoration-line: underline;
+  /* text-decoration-style: dashed; */
+  text-decoration-color: gainsboro;
+}
+.reveal A:hover {
+  text-decoration-style: solid;
+  color: #a23;
+  text-decoration-color: #a23;
+}
+
+.reveal-viewport {
+  color: #eee;
+}

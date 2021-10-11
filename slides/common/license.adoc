@@ -1,0 +1,10 @@
+== License
+:imagesdir: ./figures
+image:cc_white.svg[frame=none] image:attribution_icon_white.svg[noborder]
+
+Except where otherwise noted, +
+this presentation is licensed under the +
+http://creativecommons.org/licenses/by/4.0/[Creative Commons Attribution 4.0 International License]
+
+Third party marks and brands are the property of their respective holders
+

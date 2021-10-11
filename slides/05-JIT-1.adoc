@@ -1,0 +1,269 @@
+include::common/theme.adoc[]
+= Managed Runtime Systems =
+
+include::common/settings.adoc[]
+include::common/license.adoc[]
+
+
+=== Acknowledgments ===
+The following slides are based on
+
+http://www.wolczko.com/[Mario Wolczko's] slides about https://www.dropbox.com/s/hqc2axihgvxtadf/10\%20Dynamic\%20compilation.pdf[_Dynamic Compilation_]
+
+
+== Introduction ==
+
+=== Interpretation is Slow ===
+* Step a single (or a few) bytecode(s) a time
+* Not suitable execution patterns for HW-prefetchers
+* Not enough data at hand to perform optimizations
+
+
+=== Dynamic Compilation to the Rescue ===
+* Produce machine code
+* Better execution patterns for HW-prefetchers
+* More data at hand to perform optimizations
+* Generation of HW-specific code
+* Generation of case-specific code
+
+
+== Dynamic Compiler Design Decisions ==
+
+=== How Much to Compile? ===
+* Basic Block
+* Method
+* Multiple Methods (via inlining)
+* Multiple Consecutive Methods (via tracing)
+
+
+[.columns]
+=== When to Compile? ===
+
+[%step]
+[.column.is-two-fifths]
+--
+* Ahead of Time (AoT)
+** At class loading
+** At installation +
+   (see Android's dex2oat)
+--
+
+[.column]
+--
+[%step]
+* Pedantic Just in Time (JIT)
+** Compile at first invocation +
+   (stall till compilation completes)
+** Re-use on later invocations
+* Practical JIT
+** Start compiling after stem:[n] invocations
+** Interpret while compiling to avoid stalls
+--
+
+=== How Much to Optimize? ===
+
+* *Minimal*: Replace *bytecodes* with function calls,
+like macro expansion
+* *Simple*:
+** Use HW-registers
+** Perform *peephole* optimizations +
+   (substituting instruction sequences with more efficient ones)
+* *Advanced*:
+** Run various analyses on code
+** Generate multiple instances of same method for different cases
+** ...
+
+
+== When to JIT ==
+
+[.columns]
+=== So! When should I JIT compile? ===
+
+[.column]
+--
+Key factors:
+
+* Speed of *interpretation*
+* Speed of *compilation*
+* Speed of *compiled code*
+--
+
+[.column]
+--
+image:../plots/when-to-jit-1.svg[]
+--
+
+
+=== Measuring Speed ===
+* Measure the *whole run* in *clock cycles*
+* *Subtract* GC time, native code, and anything unrelated
+* Divide by number of bytecodes to obtain *cycles per bytecode*
+
+
+=== Measuring Speed ===
+* Interpretation time *stem:[t_i]*
+* Compilation time *stem:[t_c]*
+* Execution time of compiled code *stem:[t_e]*
+* Compiler over Interpreter ratio *stem:[\tau = {t_c \over t_i}]* (mnemonic: _translate_)
+* Interpreter over Compiled code ratio *stem:[\rho = {t_i \over t_e}]* (mnemonic: _run_)
+
+
+=== The break-even point ===
+*stem:[\beta = {t_c \over t_i - t_e} = {{\rho \tau} \over \rho - 1}]*
+
+
+=== !
+stem:[\beta = {{\rho \tau} \over \rho - 1}]
+
+Example: stem:[t_e = 1], stem:[t_i = 2], stem:[t_c = 10], stem:[\tau = 5], stem:[\rho = 2], stem:[\beta = 10]
+
+image:../plots/when-to-jit-2.svg[]
+
+=== !
+stem:[\mathrm{Speedup} = {{n t_i} \over t_c + n t_e} = {{n \rho} \over n + \rho \tau}] for stem:[\rho = 5], stem:[\tau = 100]
+
+image:../plots/when-to-jit-3.svg[]
+
+
+== How to JIT ==
+
+=== Interaction of JITed and non-JITed Code ===
+* JITed code can invoke non-JITed code
+* JITed code can fall-back to non-JITed counterpart
+
+
+=== JITed Code Management ===
+* Maintain a *code cache* holding the JITed code
+* VMs manage it to ensure new code can be added when needed
+* Compilers rely on a big buffer to produce the code
+* The JITed code is then copied to the code cache
+* Calls to that code are redirected (e.g. through method tables)
+
+
+=== When to Remove Code ===
+* When the corresponding code *becomes unreachable* +
+  (e.g. class unloading)
+* When the code cache doesn't have enough *space for new code*
+
+
+=== What if Still Active? ===
+* Keep an *activation-counter*
+* *Scan* the stacks for activation records
+
+[%step]
+[.red]
+Sounds familiar?
+
+
+=== Stack Scanning ===
+* *Walk the stack* looking for return addresses
+* The *calling convention* must allow it
+** Standard placement of return addresses in the stack
+** Access to saved registers (e.g. SP, FP) of suspended threads
+* Depends on underlying, architecture, OS, and calling convention
+* The OS can make this *impossible* +
+  (e.g., by saving register state in kernel space).
+
+
+=== What if Still Active? ===
+* Let it be
+* Drop it and patch any activation records pointing to it
+** Do the housekeeping (fix state, fix return address, etc.)
+** Make it resume in the interpreter
+** Called *dynamic deoptimization*
+** It's slow!!!
+
+
+=== Code Cache Fragmentation ===
+* Self VM uses *compaction*
+** Similar to GC
+** Stop the world
+** Compact code cache
+** Update links (method tables) and +
+   return addresses (activation records)
+* HotSpot drops code till enough space becomes available
+
+[.columns.is-vcentered]
+=== Using the Heap ===
+[.column.is-one-third]
+--
+Make compiled code an object in the heap
+--
+
+[%step]
+[.column]
+--
+* Pros:
+** *Share* memory management mechanisms
+* Cons:
+** Compiled code usually *lives long*
+** A bug may give *write access to generated code*
+--
+
+== Impact of JITed Code on Garbage Collection ==
+*More* roots
+
+Pointers might be:
+
+* in *HW-registers*
+* *stack frames* of JITed code
+* or even *hardcoded* in the JITed code (as literals)
+
+A HW-register might even contain a pointer in the middle of (de)construction, e.g. pointer arithmetic
+
+
+=== Keeping Track of Roots in Registers ===
+* All activations (except the top) are at a *call site*
+* For each call site keep a *register map*
+* The register map indicates which registers are live
+
+
+=== Keeping Track of Roots in Registers: Example ===
+* Self compilers inject a register map word after each call
+each bit represents a register, with the bit set if the register is live and has an oop
+* The return sequence skips over the map
+* A simple stack scan locates all the register maps
+
+
+=== Keeping Track of Roots in Registers of Top Frame ===
+* No root call site with register map
+* Can be suspended at any instruction
+
+---
+
+* Only allow suspension at GC *safe points*, with register maps
+* Maintain register maps at fixed locations and use *abstract interpretation* to derive the map at current point
+* *Replay* the compiler to produce the register map(s)
+
+
+=== GC Safe Points ===
+* Safe points are placed at JITed *code entry and back-branches*
+* At safe points *ask the VM* whether the thread should suspend
+* To stop-the-world all threads need to *reach a safe point*
+* Waiting others to reach a safe point, threads can *scan themselves*
+
+
+=== Keeping Track of Roots on the Stack ===
+* Keep *stack maps* for each call site
+* Keep the stack maps in the code cache
+* Add a pointer to them after the call
+
+
+=== Keeping Track of Roots in the Code ===
+If the compiler hardcodes pointers in the JITed code:
+
+* It might be in complex form
+e.g., *piecemeal assembly*
+* The compiler emits a table identifying the locations of these refs
+* The VM needs to be able to use them as roots
+* The VM needs to be able to alter them if needed
+
+
+== Interesting Facts About JIT ==
+* Term originates from just-in-time manufacturing +
+  (aka kanban method)
+* Appeared around the time of Java’s uptake
+* Terrible misnomer (should be *just too late*)
+* Universally misapplied +
+  (e.g., to dynamic compilation *after* first execution)
+* *JIT* is [.red]#not a noun#
