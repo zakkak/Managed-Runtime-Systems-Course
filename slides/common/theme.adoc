@@ -1,1 +1,1 @@
-:revealjs_theme: blood
+:revealjs_theme: moon

@@ -6,19 +6,28 @@ include::common/license.adoc[]
 
 == Introduction ==
 
+[background-image="redhat-back.jpg", background-opacity=.8, background-size=contain]
+[.dark-bg]
+[.columns]
 === Who am I? ===
+
+[.column.is-three-fifths]
+--
+* Software Engineer at [.red]#*https://www.redhat.com/[Red Hat]*#
+* [.red]#*Visiting Instructor*# at https://www.csd.uoc.gr[CSD UoC]
+--
+
+[.column]
+--
+Working on +
+[.red]#*Managed Runtime Systems*#
+--
 
 [.refs]
 --
 * [Background Image Copyright © Red Hat, Inc.]
 --
 
-* My name is [.red]#*Foivos Zakkak*#
-* Software Engineer at [.red]#*https://www.redhat.com/[Red Hat]*#
-* [.red]#*Visiting Instructor*# at https://www.csd.uoc.gr[CSD UoC]
-* Working on [.red]#*Managed Runtime Systems*#
-
-image::redhat-back.jpg[background, size=contain]
 
 
 === Who are You? ===

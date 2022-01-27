@@ -1,0 +1,295 @@
+include::common/theme.adoc[]
+= Managed Runtime Systems =
+
+include::common/settings.adoc[]
+include::common/license.adoc[]
+
+=== Acknowledgments ===
+The following slides are based on the corresponding
+slides of http://www.wolczko.com/[Mario Wolczko] about Memory Management:
+
+* https://www.dropbox.com/s/bnwq1q677spkglp/7%20Memory%20management.pdf[Memory management part 1]
+* https://www.dropbox.com/s/gxsuu4uqbgwo88f/7B%20Memory%20Management%2C%20part%202.pdf[Memory management part 2]
+* https://www.dropbox.com/s/f0lwnc9zjtw8dxy/7C%20Debugging%20hints.pdf[Memory management debugging hints]
+
+[.red.background]
+== Memory Management Introduction
+
+Static vs Dynamic Allocation
+
+=== Static Memory Allocation
+
+* Binding of name to memory addresses at [.red]#compile/link# time
+* All sizes are fixed, i.e. [.red]#known at compile time#
+* [.red]#No stack# allocation
+* Used in early FORTRAN, BASIC and various languages for [.red]#embedded/real-time systems#
+
+=== Static Memory Allocation
+
+* Pros
+** [.red]#No runtime overheads# for allocation/de-allocation
+** Memory requirements [.red]#known at compile time#
+** [.red]#No failures# due to lack of memory
+* Cons
+** Need to allocate and keep [.red]#the maximum possible memory footprint# for the whole program execution
+** [.red]#No recursion# due to lack of stack allocation
+
+=== Dynamic Allocation (on the stack)
+
+* Languages (at least most of them) are [.red]#based on procedures#
+* [.red]#LIFO/Depth-First# invocation order (in most cases footnote:[See Scheme and Smalltalk for counter-examples])
+* Memory used by procedures can be [.red]#managed as a stack#
+* [.red]#Hardware support# (SP register, call/ret instr.) since the 1960s
+
+=== Dynamic Allocation (on the stack)
+
+* Pros
+** [.red]#Low runtime overheads#
+** [.red]#Bump stack pointer# for allocation
+** [.red]#Bulk# de-allocation on return
+** No [.red]#memory leaks#
+* Cons
+** Names passed as parameters, the deeper a procedure is invoked [.red]#the more parameters it gets#
+** [.red]#Cannot return memory# to previous procedures
+** Data-lifetime [.red]#equals# the procedure’s lifetime
+** Can’t handle [.red]#complex data structures# like graphs
+
+=== Dynamic Allocation (on the heap)
+
+* [.red]#Arbitrary requests# for memory segments
+* Allocations [.red]#may fail#
+* Fast allocation vs Fast de-allocation [.red]#trade-offs#
+* Heap may [.red]#not be contiguous#
+
+=== Dynamic Allocation (on the heap) 
+
+.Pros
+* [.red]#Arbitrary# allocation sizes
+* Allocation and de-allocation [.red]#from different procedures#
+* Handling of [.red]#complex data structures#
+
+.Cons
+* Noticeable [.red]#runtime overheads#
+* Need to perform [.red]##a de-allocation for each allocation##footnote:[See region-based allocation for an *enhancement]
+* [.red]#Memory leaks# are possible
+
+=== Heap Allocation
+
+include::figures/heap-allocation.adoc[]
+
+=== Heap Allocation: Free-list variations
+
+* [.red]#First-Fit#:
+** Search free-list from the beginning, peek first block that fits
+** Add the remaining of the block (if any) as a new block to the list
+** May result in a number of small blocks at beginning of free-list
+* [.red]#Best-Fit#:
+** Search free-list from the beginning, peek the block that best fits
+** Add the remaining of the block (if any) as a new block to the list
+** Reduces fragmentation
+** Slow since we need to traverse the whole free-list
+* [.red]#Next-Fit#:
+** Search from where we stopped last time, peek the block that best fits
+** Add the remaining of the block (if any) as a new block to the list
+** Might increase fragmentation
+** Often faster than First-fit
+
+=== First-Fit
+
+[draw, rectangle, anchor=north, thick, minimum width=2cm, minimum
+height=1cm] = [->, thick] = [arrow, color=myyellow, dashed]
+
+=== Best-Fit
+
+[draw, rectangle, anchor=north, thick, minimum width=2cm, minimum
+height=1cm] = [->, thick] = [arrow, color=myyellow, dashed]
+
+=== Next-Fit
+
+[draw, rectangle, anchor=north, thick, minimum width=2cm, minimum
+height=1cm] = [->, thick] = [arrow, color=myyellow, dashed]
+
+=== Fragmentation
+
+* Fragmentation is the phenomenon of [.red]#not being able to use
+parts of memory# because of inefficient management
+* A [.red]#heavily fragmented# system may have [.red]#plenty of free
+memory#, but chopped in small blocks that [.red]#don’t fit# a new
+request
+
+[rectangle, thick, fill=myyellow, minimum width=1cm, minimum
+height=1cm]
+
+=== Fragmentation Categorization
+
+* [.red]#Internal Fragmentation# is the result of allocating larger
+chunks than actually needed (often due to alignment restrictions)
+* [.red]#External Fragmentation# is the result of constantly splitting
+free blocks, resulting in multiple small non-contiguous free blocks that
+cannot be used
+
+=== Free-list Allocation Main Overheads
+
+* Loop over free-blocks, even over obvious non-matches
+* For each block check if it fits
+* Split the block if it’s bigger
+
+=== Single-size Free-lists
+
+* A set of free-lists, one for each size (for a set of common sizes)
+* A generic free-list for the rest
+* Always peek the first block from the list of the desired size
+* If empty take a block from the generic one and split it
+
+=== Single-size Free-lists
+
+[draw, rectangle, anchor=north, thick, minimum width=2cm, minimum
+height=1cm] = [->, thick] = [arrow, color=myyellow, dashed]
+
+=== !
+What about [.red]#multi-threaded# applications???
+
+== Garbage Collection
+
+* Ease programming, no need to argue about object lifetimes
+* Eliminate errors due to dangling pointers
+* Take care of the previous issues
+* Still possible to leak memory!
+
+=== How does it work?
+
+[source, java]
+....
+public static void main(String args[]) {
+  List<String> lines=
+    Files.readAllLines(Paths.get(args[0]),
+                       Charset.defaultCharset());
+  int nLines= lines.size();
+  // reclaim lines??
+  System.out.println(nLines);
+}
+....
+
+[background-image="crystal-ball.jpg", background-opacity=.3, background-size=contain]
+=== Liveness
+
+An object is _dead_ when it is *no longer needed*!
+
+[%step]
+[quote, Mario Wolczko]
+--
+But, VMs (and compilers) have severely limited crystal balls
+--
+
+[.refs]
+--
+* Background Photo by https://www.pexels.com/@gantas?utm_content=attributionCopyText&utm_medium=referral&utm_source=pexels[Gantas Vaičiulėnas from Pexels]
+--
+
+=== Liveness in the Real World
+
+* An object is _dead_ when it is [.red]#no longer reachable#
+** Reachable is an object that can be reached by following pointers
+starting from the system’s roots
+** The system’s roots are all the variables in scope (of all threads)
+** Requires traversal of stacks and globals
+
+=== Reachability
+
+[draw, rectangle, thick, minimum width=1cm, minimum height=1cm] = [->,
+thick] = [arrow, color=myyellow]
+
+=== Reference Counting
+
+=== Reference Counting
+
+* Keep a reference [.red]#counter per object#
+* [.red]#Increment# it when a reference to that object is assigned to a variable
+* [.red]#Decrement# it when a reference to that object is overwritten
+* If the counter is [.red]#zero#, the object [.red]#can be reclaimed#
+
+=== Reference Counting Drawbacks
+
+* Reference counting has to be [.red]#performed on all variables# +
+  (stack, global, and heap)
+* References in an activation record have to be [.red]#decremented before de-allocating the frame# upon return
+* Decrementing the reference counter [.red]#often incurs a cache miss#
+* Decrementing the reference counter [.red]#always incurs a write#
+* Concurrent threads might [.red]#contend on the reference counter#
+* [.red]#Cannot reclaim cycles#
+
+=== Reference Counting Delay Reclamation
+
+* Avoid [.red]#unbound recursion#
+* [.red]#Reduce the number of pauses# for Garbage Collection
+
+=== Tracing Collection
+
+=== Tracing Collection: Mark-n-Sweep
+
+* Mark: Follow the system’s roots and [.red]#mark reachable objects#
+* Sweep: [.red]#Reclaim unmarked objects# at the end
+
+=== Mark Implementations
+
+* [.red]#Recursive#: Worst case each object creates an activation (a
+single linked-list)
+* [.red]#Work queue#: Each object creates a new node in the queue
+
+=== Sweep Implementation
+
+* Add reclaimed chunks to a [.red]#free-list#
+* Requires [.red]#parsing the whole heap# to find the non-marked
+objects
+** Possible (using the object headers), but [.red]#inefficient#
+* [.red]#Coalescing# adjacent free blocks
+
+=== Compacting Sweep
+
+* Move _live_ objects to consecutive memory addresses
+** Moving objects [.red]#breaks references# though
+* Create a [.red]#contiguous large free space# after the _live_
+objects
+* Run on [.red]#every collection# or when heap is [.red]#heavily
+fragmented#
+
+=== Compacting Sweep with Forwarding Pointers
+
+[.red]#Amend# each object
+with a forwarding pointer in its header +
+
+* [.red]#Compute# forwarding pointers
+* [.red]#Update# all pointers using the forwarding pointers
+* [.red]#Move# the objects
+
+=== Compacting Sweep with Temporary Table
+
+* Instead of using a forwarding pointer [.red]#replace actual header with pointer to a temporary table entry#
+* Each temporary table entry holds [.red]#a header and a forwarding location#
+
+=== Compacting Sweep with _Threading_
+
+* Replace the object header with a pointer to a list
+* This starts from the object and goes through all the fields that reference it
+* The last field in the list contains the initial content of the object header
+* When the object is moved the list is traversed to update the corresponding fields
+
+=== Copying Collection
+
+=== Copying Collection
+
+* [.red]#Trace and compaction# combination
+* [.red]#Split memory# in _from_ and _to_ semi-spaces
+* [.red]#Copy# _live_ object on trace to _to_ semi-space
+* [.red]#Leave# forwarding pointers in _from_ semi-space
+* At the end, _from_ becomes _to_ and vice versa
+
+=== Copying Collection 
+
+* Pros
+** [.red]#Bump# allocation
+** Traverse [.red]#only live# objects
+** [.red]#Increase locality?#
+* Cons
+** Requires [.red]#twice the memory#
+** [.red]#Copies the whole heap# in each collection

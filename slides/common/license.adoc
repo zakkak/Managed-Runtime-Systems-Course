@@ -1,6 +1,6 @@
 == License
 :imagesdir: ./figures
-image:cc_white.svg[frame=none] image:attribution_icon_white.svg[noborder]
+image:cc_white.svg[] image:attribution_icon_white.svg[]
 
 Except where otherwise noted, +
 this presentation is licensed under the +

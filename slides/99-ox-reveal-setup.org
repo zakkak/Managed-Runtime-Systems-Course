@@ -11,3 +11,4 @@
 #+OPTIONS: toc:nil \n:t num:0
 
 # #+MACRO: alert @@html:<font color="#FFAA00">$1</font>@@
+#+MACRO: alert [.red]#*$1*#

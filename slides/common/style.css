@@ -83,10 +83,10 @@ DIV.refs {
 
 /* No blue links */
 .reveal A {
-  color: gainsboro;
+  color: gray;
   text-decoration-line: underline;
   /* text-decoration-style: dashed; */
-  text-decoration-color: gainsboro;
+  text-decoration-color: gray;
 }
 .reveal A:hover {
   text-decoration-style: solid;
@@ -94,6 +94,21 @@ DIV.refs {
   text-decoration-color: #a23;
 }
 
+.dark-bg {
+  color: white;
+}
+
 .reveal-viewport {
-  color: #eee;
+  color: #93a1a1;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.anim.fragment.visible:not(.current-fragment) {
+  display: none;
+  height:0px;
+  line-height: 0px;
+  font-size: 0px;
 }
